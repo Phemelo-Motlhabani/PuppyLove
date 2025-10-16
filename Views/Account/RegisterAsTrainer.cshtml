@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model TrainerRegisterViewModel
+@{
+    ViewData["Title"] = "Register as Trainer";
+}
+<h2>@ViewData["Title"]</h2>
+<form asp-action="RegisterAsTrainer" method="post">
+    <div asp-validation-summary="All"class="text-danger"></div>
+    <label asp-for = "Fname">Name</label>
+    <input asp-for="Fname" class="form-control"/>
+    <label asp-for="Lname">Surname</label>
+    <input asp-for="Lname" class="form-control" />
+    @*<label asp-for="TrainerId">TrainerID</label>
+    <input asp-for="TrainerId" class="form-control" />*@
+    <label asp-for="CellNum">Phone No.</label>
+    <input asp-for="CellNum" class="form-control" />
+    <label asp-for="suburb">Suburb</label>
+    <input asp-for="suburb" class="form-control" />
+    <label asp-for="city">City</label>
+    <input asp-for="city" class="form-control" />
+    <label asp-for="Email">Email</label>
+    <input asp-for="Email" class="form-control" />
+    <label asp-for="username">Username</label>
+    <input asp-for="username" class="form-control" />
+    <div class="form-group mb-3">
+        <label asp-for="ImageFile">Upload Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+    <label asp-for="Password">Password</label>
+    <input asp-for="Password" class="form-control" />
+    <label asp-for="PasswordConfirmation">Password Confirmation</label>
+    <input asp-for="PasswordConfirmation" class="form-control" />
+<button type="submit" class="btn btn-success mt-3">Register</button>
+<button onclick="history.back()" class="btn btn-secondary mt-3">Back</button>
+</form>

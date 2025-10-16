@@ -1,0 +1,37 @@
+﻿@model PupV1.Models.PuppyDetails
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-sm p-3" style="max-width: 800px;">
+    <div class="row g-0">
+        <!-- LEFT SIDE: Image + Puppy & Breeder Name -->
+        <div class="col-md-4 text-center">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="img-fluid rounded mb-2" style="max-height: 250px; object-fit: cover;" />
+            <h5 class="fw-bold">@Model.Name</h5>
+            <p class="text-muted"><a asp-action="Breeder" asp-controller="ClientDashboard" asp-route-id="@Model.BreederId" style="text-decoration: underline; color: blue;">@Model.BreederName</a></p>
+        </div>
+
+        <!-- RIGHT SIDE: Puppy Details -->
+        <div class="col-md-8">
+            <div class="card-body">
+                <p><strong>Gender:</strong> @Model.Gender</p>
+                <p><strong>Colour:</strong> @Model.Colour</p>
+                <p><strong>Breed:</strong> @Model.Breed</p>
+                <p><strong>Size:</strong> @Model.Size</p>
+
+                <form asp-action="RequestPuppy" asp-route-id="@Model.PuppyId" method="post">
+                    <button type="submit" class="btn btn-primary mt-3">Request</button>
+                </form>
+                <!--<button class="btn btn-primary mt-3" asp-action="RequestPuppy" asp-route-id="@Model.PuppyId">Request</button>-->
+            </div>
+        </div>
+    </div>
+</div>

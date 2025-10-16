@@ -1,0 +1,55 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div class="text-center">
+    <a asp-controller="Account" asp-action="ChooseRole">Register</a>
+</div>
+@model IEnumerable<PupV1.Models.Parkrecommendation>
+
+@*@<div id="ParkCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        @if (Model != null && Model.Any())
+        {
+            int i = 0;
+            foreach (var park in Model)
+            {
+                <div class="carousel-item @(i == 0 ?" active" : "")">
+                    <img src="@park.ImageUrl" class="d-block w-50" alt="@park.ParkName" />
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>@park.ParkName</h5>
+                        <p>@park.Suburb</p>
+                    </div>
+                    </div>
+                    i++;
+            }
+
+        }
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#parkCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#parkCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>*@
+<div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+        @foreach (var park in Model)
+        {
+            <div class="swiper-slide text-center" style="height: 250px;">
+                <img src="@park.ImageUrl" class="img-fluid" style="height:200px; object-fit:cover;" />
+                <div class="mt-2">
+                    <h6>@park.ParkName</h6>
+                    <p>@park.Suburb, @park.City</p>
+                    </div>
+                    </div>
+        }
+    </div>
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>

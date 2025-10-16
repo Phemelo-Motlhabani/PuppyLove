@@ -1,0 +1,33 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model ClientRegisterViewModel
+@{
+    ViewData["Title"] = "Register as Client";
+}
+<h2>@ViewData["Title"]</h2>
+<form asp-action="RegisterAsClient" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <label asp-for="Fname">Name</label>
+    <input asp-for="Fname" class="form-control" />
+    <label asp-for="Lname">Surname</label>
+    <input asp-for="Lname" class="form-control" />
+    <label asp-for="CellNum">Phone No.</label>
+    <input asp-for="CellNum" class="form-control" />
+    <label asp-for="Suburb">Suburb</label>
+    <input asp-for="Suburb" class="form-control" />
+    <label asp-for="City">City</label>
+    <input asp-for="City" class="form-control" />
+    <label asp-for="PostCode">Post Code</label>
+    <input asp-for="PostCode" class="form-control" />
+    <label asp-for="Email">Email</label>
+    <input asp-for="Email" class="form-control" />
+    <label asp-for="Username">Username</label>
+    <input asp-for="Username" class="form-control" />
+    <label asp-for="Password">Password</label>
+    <input asp-for="Password" class="form-control" />
+    <label asp-for="PasswordConfirmation">Password Confirmation</label>
+    <input asp-for="PasswordConfirmation" class="form-control" />
+    <button type="submit" class="btn btn-success mt-3">Register</button>
+    <button onclick="history.back()" class="btn btn-secondary mt-3">Back</button>
+</form>

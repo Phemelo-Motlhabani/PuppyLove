@@ -1,0 +1,28 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.Breeder;
+@{
+    ViewData["Title"] = "Write a review";
+}
+
+<div class="card shadow-sm p-3" style="max-width: 800px;">
+<!--<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">-->
+    <!-- Success/Error messages -->
+    <!-- Review submission form -->
+
+    <form asp-action="PostReview" method="post" class="mb-4">
+        <div class="mb-3">
+            <input type="hidden" name="breederId" value="@Model.BreederId" />
+            <label for="rating" class="form-label">Rating (0–5)</label>
+            <input type="range" class="form-range" id="rating" name="rating" min="0" max="5" step="1"
+                   oninput="document.getElementById('ratingValue').value = this.value">
+    <input type="number" id="ratingValue" name="rating" min="0" max="5" step="1" class="form-control w-25 mt-2" value="3">
+        </div>
+        <div class="mb-3">
+            <label for="reviewText" class="form-label">Your Review</label>
+            <textarea id="reviewText" name="reviewText" class="form-control" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+</div>

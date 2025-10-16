@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+namespace PupV1.Models;
+
+[Table("puppyrequest")]
+[Index("BreederId", Name = "fk_PuppyRequest_Breeder")]
+[Index("ClientId", Name = "fk_PuppyRequest_Client")]
+public partial class Puppyrequest
+{
+    [Key]
+    [Column("RequestID")]
+    public int RequestId { get; set; }
+
+    [StringLength(1)]
+    public string? Status { get; set; }
+
+    [Column(TypeName = "datetime")]
+    public DateTime? ExpDate { get; set; }
+
+    [Column("ClientID")]
+    public int? ClientId { get; set; }
+
+    [Column("BreederID")]
+    public int? BreederId { get; set; }
+
+    [ForeignKey("BreederId")]
+    [InverseProperty("Puppyrequests")]
+    public virtual Breeder? Breeder { get; set; }
+
+    [ForeignKey("ClientId")]
+    [InverseProperty("Puppyrequests")]
+    public virtual Client? Client { get; set; }
+}

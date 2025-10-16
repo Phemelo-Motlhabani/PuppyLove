@@ -1,0 +1,221 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+<h2>Welcome, @Model.Name!</h2>
+
+<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">
+<div>
+        <img src="@Model.ImageUrl" class="img-fluid" style="height:200px; object-fit:cover;" />
+    <p><strong>Name:</strong> @Model.Name</p>
+    <p><strong>Surname:</strong> @Model.Surname</p>
+    <p><strong>Suburb:</strong> @Model.Suburb</p>
+    <p><strong>City:</strong> @Model.City</p>
+    <p><strong>Phone Number:</strong> @Model.CellNUm</p>
+</div>
+<button class="btn btn-primary" onclick="toggleProfile()">View</button>
+
+<div id="profileDiv" style="display:none; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 20px;background-color:#f0f8ff;">
+    <form asp-action="UpdateProfile" method="post">
+        <div class="form-group">
+            <label>Name</label>
+            <input asp-for="Name" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Surname</label>
+            <input asp-for="Surname" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Suburb</label>
+            <input asp-for="Suburb" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>City</label>
+            <input asp-for="City" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Phone Number</label>
+            <input asp-for="CellNUm" class="form-control" />
+        </div>
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile">Upload Image</label>
+                <input asp-for="ImageFile" type="file" class="form-control" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+        <input type="hidden" asp-for="Username" />
+        <button type="submit" class="btn btn-success mt-2">Update Profile</button>
+    </form>
+</div>
+</div>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success">
+        SUCCESS: @TempData["Message"]
+    </div>
+}
+<h3>Your Skills</h3>
+<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">
+   @* @if (ViewBag.TrainerSkills != null && ViewBag.TrainerSkills.Count > 0)
+    {
+        <ul>
+            @foreach (var skill in ViewBag.TrainerSkills)
+            {
+                <li>@skill.Skill.SkillName - @skill.SkillLevel</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No skills selected yet!</p>
+    }*@
+    @if (Model.SelectedSkills != null && Model.SelectedSkills.Count > 0)
+    {
+        <ul>
+            @foreach (var skill in Model.SelectedSkills)
+            {
+                <li>@skill.SkillName - @skill.SkillLevel</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No skills selected yet!</p>
+    }
+
+    <a href="/Dashboard/EditSkills" class="btn btn-secondary">Edit Skills</a>
+    </div>
+
+@if (TempData["Message"] !=null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["Message"]
+    </div>
+}
+@section Scripts
+{
+    <script>
+        function toggleProfile() { 
+            var div = document.getElementById("profileDiv");
+            div.style.display = div.style.display === "none" ? "block" : "none";
+        }
+    </script>
+}
+<h2>Incoming Training Requests</h2>
+<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">
+@if (!Model.TrainingRequests.Any())
+{
+    <p>No Training request at the moment.</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Client</th>
+                <th>Program</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var req in Model.TrainingRequests)
+            {
+                <tr>
+                    <td>@req.Client.Fname @req.Client.Lname</td>
+                    <td>@req.TrainingProgram</td>
+                    <td>@req.RequestStatus</td>
+                    <td>@req.RequestDate.ToShortDateString()</td>
+                    <td>
+                        @*@if (req.RequestStatus == "Pending")*@
+                        
+                            <form asp-controller="Dashboard" asp-action="AcceptRequest" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@req.TrequestId" />
+                                <button class="btn btn-success btn-sm">Accept</button>
+                            </form>
+                            <form asp-controller="Dashboard" asp-action="RejectRequest" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@req.TrequestId" />
+                                <button class="btn btn-danger btn-sm">Reject</button>
+                            </form>
+                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+</div>
+<div class="text-center mb-3">
+    <a asp-controller="Parkrecommendation" asp-action="Create" class="btn btn-success">
+        Recommend a Park
+    </a>
+</div>
+<h2>Training Progress</h2>
+<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">
+
+    
+    <p><strong>Current Training Records: @Model.TrainingProgresses.Count</strong></p>
+
+    <form asp-controller="Dashboard" asp-action="AddProgress" method="post">
+        @Html.AntiForgeryToken()
+        <input type="text" name="DogName" class="form-control" placeholder="Dog Name" required />
+        <input type="text" name="DogBreed" class="form-control" placeholder="Dog Breed" required />
+        <input type="text" name="OwnerName" class="form-control" placeholder="Owner Name" required />
+        <input type="text" name="Program" class="form-control" placeholder="Program" required />
+        <input type="text" name="ProgressNotes" class="form-control" placeholder="Progress Notes" required />
+        <button type="submit">Add Training</button>
+    </form>
+
+    <hr />
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Dog</th>
+                <th>Breed</th>
+                <th>Owner</th>
+                <th>Program</th>
+                <th>Progress Notes</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TrainingProgresses)
+            {
+                <tr>
+                    <td>@item.DogName</td>
+                    <td>@item.DogBreed</td>
+                    <td>@item.OwnerName</td>
+                    <td>@item.Program</td>
+                    <td>
+                        <form asp-action="UpdateProgress" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="ProgressId" value="@item.ProgressId" />
+                            <textarea name="ProgressNotes">@item.ProgressNotes</textarea>
+                            <button type="submit">Update</button>
+                        </form>
+                    </td>
+                    <td>@(item.IsFinished ? "Finished" : "In Progress")</td>
+                    <td>
+                        @if (!item.IsFinished)
+                        {
+                            <form asp-action="FinishTraining" asp-route-id="@item.ProgressId" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit">Finish</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+

@@ -1,0 +1,24 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.ClientDashboardViewModel
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+<h2>Welcome, @Model.Fname!</h2>
+
+<div class="card shadow-sm p-3" style="max-width: 800px;">
+    <!--<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">-->
+    <div>
+        <p><strong>Name:</strong> @Model.Fname</p>
+        <p><strong>Surname:</strong> @Model.Lname</p>
+        <p><strong>Suburb:</strong> @Model.Suburb</p>
+        <p><strong>City:</strong> @Model.City</p>
+        <p><strong>Phone Number:</strong> @Model.CellNum</p>
+    </div>
+    <!--
+    <button class="btn btn-primary" onclick="toggleProfile()">View</button>
+    -->
+    <form method="get" action="~/Identity/Account/Manage">
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>

@@ -1,0 +1,82 @@
+﻿@model PupV1.Models.Trainer
+
+@{
+    ViewData["Title"] = "Trainer";
+}
+
+@*
+!if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+*@
+
+<div class="card shadow-sm p-3" style="max-width: 800px;">
+    <div class="row g-0">
+        <!-- LEFT SIDE: Image + Puppy & Breeder Name -->
+        <div class="col-md-4 text-center">
+            <img src="@Model.ImageUrl" alt="@Model.Fname @Model.Lname" class="img-fluid rounded mb-2" style="max-height: 250px; object-fit: cover;" />
+            <h5 class="fw-bold">@Model.Fname @Model.Lname</h5>
+            <span class="text-muted">@Model.Suburb</span></br>
+            <span class="text-muted">@Model.City</span>
+        </div>
+
+        <!-- RIGHT SIDE: Puppy Details -->
+        <div class="col-md-8">
+            <div class="card-body">
+
+                <!-- Success/Error messages -->
+                @if (TempData["Success"] != null)
+                {
+                    <div class="alert alert-success">@TempData["Success"]</div>
+                }
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger">@TempData["Error"]</div>
+                }
+
+                <!-- Display reviews -->
+                <h5>Reviews</h5>
+
+                @if (!Model.Reviews.Any())
+                {
+                    <p>No reviews yet. Be the first to leave one!</p>
+                }
+                else
+                {
+                    <div class="list-group">
+                        @foreach (var review in Model.Reviews)
+                        {
+                            <div class="list-group-item">
+                                <strong> @review.Client.Username </strong>
+                                <!--
+                                <span class="text-warning">
+                                    !for (int i = 0; i < review.Rating; i++)
+                                    {
+                                        <i class="bi bi-star-fill"></i>
+                                    }
+
+                                    !for (int i = review.Rating; i < 5; i++)
+                                    {
+                                        <i class="bi bi-star"></i>
+                                    }
+                                </span>
+                                -->
+                                <br />
+                                <span>@review.Rating/5</span>
+                                <br />
+                                <p>@review.ReviewText</p>
+                            </div>
+                        }
+                    </div>
+                }
+                <form asp-action="TrainerReview" asp-route-id="@Model.TrainerId" method="post">
+                    <button type="submit" class="btn btn-primary mt-3">Write a review</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\PupV1\\PupV1.csproj": {}
+    "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\PupV1.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\PupV1\\PupV1.csproj": {
+    "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\PupV1.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\PupV1\\PupV1.csproj",
+        "projectUniqueName": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\PupV1.csproj",
         "projectName": "PupV1",
-        "projectPath": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\PupV1\\PupV1.csproj",
+        "projectPath": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\PupV1.csproj",
         "packagesPath": "C:\\Users\\Marais\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\PupV1\\obj\\",
+        "outputPath": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Marais\\AppData\\Roaming\\NuGet\\NuGet.Config",

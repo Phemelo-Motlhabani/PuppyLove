@@ -1,0 +1,81 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.BreederDashboardViewModel
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+<h2>Welcome, @Model.Name!</h2>
+
+<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">
+    <div>
+        <img src="@Model.ImageUrl" alt="Profile Picture" class="img-fluid rounded" style="height:200px; object-fit:cover;" />
+        <p><strong>Name:</strong> @Model.Name</p>
+        <p><strong>Surname:</strong> @Model.Surname</p>
+        <p><strong>Suburb:</strong> @Model.Suburb</p>
+        <p><strong>City:</strong> @Model.City</p>
+        <p><strong>Phone Number:</strong> @Model.CellNUm</p>
+        <p><strong>Kennel Name:</strong> @Model.KennelName</p>
+        
+    </div>
+    <button class="btn btn-primary" onclick="toggleProfile()">View</button>
+
+    <div id="profileDiv" style="display:none; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 20px;background-color:#f0f8ff;">
+        <form asp-action="UpdateProfile" method="post">
+            <div class="form-group">
+                <label>Name</label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Surname</label>
+                <input asp-for="Surname" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Suburb</label>
+                <input asp-for="Suburb" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>City</label>
+                <input asp-for="City" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input asp-for="CellNUm" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Kennel Name</label>
+                <input asp-for="KennelName" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile">Upload Image</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Username" />
+            <button type="submit" class="btn btn-success mt-2">Update Profile</button>
+            <button type="button" class="btn btn-secondary mt-2" onclick="toggleProfile()">Cancel</button>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        function toggleProfile() {
+            var profileDiv = document.getElementById('profileDiv');
+            if (profileDiv.style.display === 'none') {
+                profileDiv.style.display = 'block';
+            } else {
+                profileDiv.style.display = 'none';
+            }
+        }
+    </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

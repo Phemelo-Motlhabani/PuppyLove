@@ -1,0 +1,127 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.LitterDetailsViewModel
+@{
+    ViewData["Title"] = "Litter Details";
+}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>@Model.BreedName Litter</h2>
+        <div>
+            <a asp-controller="Puppy" asp-action="Register" asp-route-litterId="@Model.LitterId" class="btn btn-success">
+                <i class="bi bi-plus-circle"></i> Add Puppy
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">Back to Litters</a>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                @if (Model.BirthDate.HasValue)
+                {
+                <div class="col-md-6">
+                    <p><strong>Birth Date:</strong> @Model.BirthDate.Value.ToString("MMMM dd, yyyy")</p>
+                    <p><strong>Age:</strong> @((DateTime.Now - Model.BirthDate) / 7) weeks old</p>
+                </div>}
+                else{
+                <div class="col-md-6">
+                    <p><strong>Total Puppies:</strong> @Model.TotalPuppies</p>
+                    <p><strong>Available:</strong> <span class="badge bg-success">@Model.AvailablePuppies</span></p>
+                    <p><strong>Sold:</strong> <span class="badge bg-secondary">@Model.SoldPuppies</span></p>
+                </div>}
+            </div>
+            @if (!string.IsNullOrEmpty(Model.Notes))
+            {
+                <hr />
+                <p><strong>Notes:</strong></p>
+                <p>@Model.Notes</p>
+            }
+        </div>
+    </div>
+
+    <h4>Puppies in this Litter</h4>
+
+    @if (!Model.Puppies.Any())
+    {
+        <div class="alert alert-info">
+            No puppies registered yet. Click "Add Puppy" to register puppies from this litter.
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var puppy in Model.Puppies)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <img src="@puppy.ImageUrl" class="card-img-top" alt="@puppy.PuppyName" style="height: 250px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">@puppy.PuppyName</h5>
+                            <p class="card-text">
+                                <strong>Gender:</strong> @(puppy.Gender == "M" ? "Male" : "Female")<br />
+                                <strong>Color:</strong> @puppy.Colour<br />
+                                <strong>Weight:</strong> @puppy.Weight kg<br />
+                                <strong>Price:</strong> R @puppy.Price?.ToString("N2")
+                            </p>
+
+                            @if (puppy.Status == "Available")
+                            {
+                                <span class="badge bg-success mb-2">Available</span>
+                            }
+                            else if (puppy.Status == "Sold")
+                            {
+                                <span class="badge bg-secondary mb-2">Sold</span>
+                            }
+
+                            <div class="d-flex gap-2">
+                                <a asp-controller="Puppy" asp-action="Details" asp-route-id="@puppy.PuppyId"
+                                   class="btn btn-sm btn-outline-primary">Details</a>
+
+                                @if (puppy.Status == "Available")
+                                {
+                                    <form asp-controller="Puppy" asp-action="MarkAsSold" asp-route-id="@puppy.PuppyId"
+                                          method="post" class="d-inline"
+                                          onsubmit="return confirm('Mark @puppy.PuppyName as sold?');">
+                                        <button type="submit" class="btn btn-sm btn-success">Mark Sold</button>
+                                    </form>
+
+                                    <form asp-controller="Puppy" asp-action="Delete" asp-route-id="@puppy.PuppyId"
+                                          method="post" class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to remove @puppy.PuppyName?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                    </form>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

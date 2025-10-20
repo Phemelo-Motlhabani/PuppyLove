@@ -5,7 +5,7 @@ namespace PupV1.Models
     {
         [Required]
         public int ClientId { get; set; }
-        public string? Username { get; set; }
+        public string Username { get; set; }
         public string? Fname { get; set; }
         public string? Lname { get; set; }
        public string? CellNum { get; set; }
@@ -17,7 +17,7 @@ namespace PupV1.Models
         public string? Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
-        public string? Password { get; set; }
+        public string Password { get; set; }
         [Required]
         [Compare("Password")]
         [Display(Name = "Confirm Password")]

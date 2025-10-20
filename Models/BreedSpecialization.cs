@@ -15,18 +15,18 @@ namespace PupV1.Models
         public int BreederId { get; set; }
 
         [Key]
-        [Column(("BreedType"))]
+        [Column(("Breedtype"))]
         public int BreedId { get; set; }
 
         public ApplicationUser User { get; set; }
-        public ActiveStatus Active {  get; set; }
+        public bool Active {  get; set; }
 
         [ForeignKey("BreederId")]
-        [InverseProperty("BreedSpecialization")]
+        [InverseProperty("BreedSpecializations")]
         public virtual Breeder Breeder { get; set; }
 
         [ForeignKey("BreedId")]
-        [InverseProperty("BreedSpecialization")]
+        [InverseProperty("BreedSpecializations")]
         public virtual Breedtype Breedtype { get; set; }
     }
 }

@@ -41,7 +41,7 @@ public partial class Breeder
     [StringLength(25)]
     public string? KennelName { get; set; }
 
-    public long? LicenceNum { get; set; }
+    public string? LicenceNum { get; set; }
 
     public string? ImageUrl { get; set; }
 
@@ -59,4 +59,7 @@ public partial class Breeder
 
     [InverseProperty("Breeder")]
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+
+    [InverseProperty("Breeder")]
+    public ICollection<BreedSpecialization> BreedSpecializations { get; set;} = new List<BreedSpecialization>();
 }

@@ -15,7 +15,7 @@ public partial class Puppyrequest
     [Column("RequestID")]
     public int RequestId { get; set; }
 
-    [StringLength(1)]
+    [StringLength(20)]
     public string? Status { get; set; }
 
     [Column(TypeName = "datetime")]
@@ -27,6 +27,9 @@ public partial class Puppyrequest
     [Column("BreederID")]
     public int? BreederId { get; set; }
 
+    [Column("PuppyID")]
+    public int PuppyId { get; set; }
+
     [ForeignKey("BreederId")]
     [InverseProperty("Puppyrequests")]
     public virtual Breeder? Breeder { get; set; }
@@ -34,4 +37,8 @@ public partial class Puppyrequest
     [ForeignKey("ClientId")]
     [InverseProperty("Puppyrequests")]
     public virtual Client? Client { get; set; }
+
+    [ForeignKey("PuppyId")]
+    [InverseProperty("Puppyrequests")]
+    public virtual Puppy? Puppy { get; set; }
 }

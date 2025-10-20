@@ -9,6 +9,7 @@ namespace PupV1.Models
         public string Suburb { get; set; } = string.Empty;
         public string City { get; set; } = string.Empty;
         public string CellNUm { get; set; } = string.Empty;
+        public string KennelName {  get; set; } = string.Empty;
 
         public int? TrainerId { get; set; } 
         public int? ClientId { get; set; }

@@ -10,7 +10,7 @@ namespace PupV1.Models;
 public partial class Breedtype
 {
     [Key]
-    [Column("BreedID")]
+    [Column("BreedId")]
     public int BreedId { get; set; }
 
     [StringLength(20)]
@@ -27,10 +27,13 @@ public partial class Breedtype
 
     public int? SaleCount { get; set; }
 
-    [InverseProperty("Breed")]
+    [InverseProperty("BreedType")]
     public virtual ICollection<Litter> Litters { get; set; } = new List<Litter>();
 
     [ForeignKey("BreedId")]
     [InverseProperty("Breeds")]
     public virtual ICollection<Trainer> Trainers { get; set; } = new List<Trainer>();
+
+    [InverseProperty("Breedtype")]
+    public ICollection<BreedSpecialization> BreedSpecializations { get; set; } = new List<BreedSpecialization>();
 }

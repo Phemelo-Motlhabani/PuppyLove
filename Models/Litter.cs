@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.EntityFrameworkCore;
 
 namespace PupV1.Models;
@@ -21,7 +22,17 @@ public partial class Litter
     [Column("BreederID")]
     public int? BreederId { get; set; }
 
+    [Display(Name = "Total Puppies")]
     public int? NumPuppies { get; set; }
+    [Display(Name = "Available Puppies")]
+    public int AvailablePuppies { get; set; }
+
+    [Display(Name = "Birth Date")]
+    [DataType(DataType.Date)]
+    public DateTime? BirthDate { get; set; }
+
+    [Display(Name ="Created Date")]
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     [ForeignKey("BreedId")]
     [InverseProperty("Litters")]

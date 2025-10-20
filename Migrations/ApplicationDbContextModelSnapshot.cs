@@ -170,6 +170,9 @@ namespace PupV1.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BreederId")
+                        .HasColumnType("int");
+
                     b.Property<string>("CellNUm")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -191,6 +194,10 @@ namespace PupV1.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("KennelName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("tinyint(1)");
@@ -242,6 +249,8 @@ namespace PupV1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BreederId");
+
                     b.HasIndex("ClientId")
                         .IsUnique();
 
@@ -258,6 +267,31 @@ namespace PupV1.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("PupV1.Models.BreedSpecialization", b =>
+                {
+                    b.Property<int>("BreederId")
+                        .HasColumnType("int")
+                        .HasColumnName("Breeder");
+
+                    b.Property<int>("BreedId")
+                        .HasColumnType("int")
+                        .HasColumnName("Breedtype");
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("varchar(255)");
+
+                    b.HasKey("BreederId", "BreedId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex(new[] { "BreedId" }, "fk_BreedSpecialization_Specialization");
+
+                    b.ToTable("breedspecialiation");
+                });
+
             modelBuilder.Entity("PupV1.Models.Breeder", b =>
                 {
                     b.Property<int>("BreederId")
@@ -265,8 +299,8 @@ namespace PupV1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("BreederID");
 
-                    b.Property<int?>("CellNum")
-                        .HasColumnType("int");
+                    b.Property<string>("CellNum")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("City")
                         .HasMaxLength(25)
@@ -288,8 +322,8 @@ namespace PupV1.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("varchar(25)");
 
-                    b.Property<long?>("LicenceNum")
-                        .HasColumnType("bigint");
+                    b.Property<string>("LicenceNum")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Lname")
                         .HasMaxLength(20)
@@ -322,7 +356,7 @@ namespace PupV1.Migrations
                     b.Property<int>("BreedId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("BreedID");
+                        .HasColumnName("BreedId");
 
                     b.Property<string>("ActivityLevel")
                         .HasMaxLength(1)
@@ -403,6 +437,12 @@ namespace PupV1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("LitterID");
 
+                    b.Property<int>("AvailablePuppies")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("BirthDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<int?>("BreedId")
                         .HasColumnType("int")
                         .HasColumnName("BreedID");
@@ -410,6 +450,9 @@ namespace PupV1.Migrations
                     b.Property<int?>("BreederId")
                         .HasColumnType("int")
                         .HasColumnName("BreederID");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<int?>("NumPuppies")
                         .HasColumnType("int");
@@ -434,7 +477,6 @@ namespace PupV1.Migrations
                         .HasColumnType("varchar(25)");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ParkName")
@@ -474,9 +516,19 @@ namespace PupV1.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Gender")
                         .HasMaxLength(1)
                         .HasColumnType("varchar(1)");
+
+                    b.Property<string>("HealthStatus")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("longtext");
@@ -485,8 +537,12 @@ namespace PupV1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("LitterID");
 
-                    b.Property<double?>("Price")
-                        .HasColumnType("double");
+                    b.Property<string>("MicrochipNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("PuppyName")
                         .HasMaxLength(25)
@@ -500,9 +556,25 @@ namespace PupV1.Migrations
                         .HasMaxLength(2)
                         .HasColumnType("varchar(2)");
 
+                    b.Property<DateTime?>("SoldDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("TrainingStatus")
                         .HasMaxLength(1)
                         .HasColumnType("varchar(1)");
+
+                    b.Property<string>("Vaccinated")
+                        .HasMaxLength(1)
+                        .HasColumnType("varchar(1)");
+
+                    b.Property<DateTime?>("VaccinationDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal?>("Weight")
+                        .HasColumnType("decimal(65,30)");
 
                     b.HasKey("PuppyId");
 
@@ -540,8 +612,8 @@ namespace PupV1.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
 
-                    b.Property<double?>("Price")
-                        .HasColumnType("double");
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(65,30)");
 
                     b.Property<string>("Size")
                         .HasColumnType("longtext");
@@ -569,11 +641,17 @@ namespace PupV1.Migrations
                     b.Property<DateTime?>("ExpDate")
                         .HasColumnType("datetime");
 
+                    b.Property<int>("PuppyId")
+                        .HasColumnType("int")
+                        .HasColumnName("PuppyID");
+
                     b.Property<string>("Status")
-                        .HasMaxLength(1)
-                        .HasColumnType("varchar(1)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.HasKey("RequestId");
+
+                    b.HasIndex("PuppyId");
 
                     b.HasIndex(new[] { "BreederId" }, "fk_PuppyRequest_Breeder");
 
@@ -911,6 +989,10 @@ namespace PupV1.Migrations
 
             modelBuilder.Entity("PupV1.Models.ApplicationUser", b =>
                 {
+                    b.HasOne("PupV1.Models.Breeder", "Breeder")
+                        .WithMany()
+                        .HasForeignKey("BreederId");
+
                     b.HasOne("PupV1.Models.Client", "Client")
                         .WithOne()
                         .HasForeignKey("PupV1.Models.ApplicationUser", "ClientId")
@@ -921,14 +1003,41 @@ namespace PupV1.Migrations
                         .HasForeignKey("PupV1.Models.ApplicationUser", "TrainerId")
                         .OnDelete(DeleteBehavior.Restrict);
 
+                    b.Navigation("Breeder");
+
                     b.Navigation("Client");
 
                     b.Navigation("Trainer");
                 });
 
+            modelBuilder.Entity("PupV1.Models.BreedSpecialization", b =>
+                {
+                    b.HasOne("PupV1.Models.Breedtype", "Breedtype")
+                        .WithMany("BreedSpecializations")
+                        .HasForeignKey("BreedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PupV1.Models.Breeder", "Breeder")
+                        .WithMany("BreedSpecializations")
+                        .HasForeignKey("BreederId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PupV1.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Breeder");
+
+                    b.Navigation("Breedtype");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("PupV1.Models.Litter", b =>
                 {
-                    b.HasOne("PupV1.Models.Breedtype", "Breed")
+                    b.HasOne("PupV1.Models.Breedtype", "BreedType")
                         .WithMany("Litters")
                         .HasForeignKey("BreedId");
 
@@ -936,7 +1045,7 @@ namespace PupV1.Migrations
                         .WithMany("Litters")
                         .HasForeignKey("BreederId");
 
-                    b.Navigation("Breed");
+                    b.Navigation("BreedType");
 
                     b.Navigation("Breeder");
                 });
@@ -977,9 +1086,17 @@ namespace PupV1.Migrations
                         .WithMany("Puppyrequests")
                         .HasForeignKey("ClientId");
 
+                    b.HasOne("PupV1.Models.Puppy", "Puppy")
+                        .WithMany("Puppyrequests")
+                        .HasForeignKey("PuppyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Breeder");
 
                     b.Navigation("Client");
+
+                    b.Navigation("Puppy");
                 });
 
             modelBuilder.Entity("PupV1.Models.Review", b =>
@@ -1062,6 +1179,8 @@ namespace PupV1.Migrations
 
             modelBuilder.Entity("PupV1.Models.Breeder", b =>
                 {
+                    b.Navigation("BreedSpecializations");
+
                     b.Navigation("Litters");
 
                     b.Navigation("Puppyrequests");
@@ -1071,6 +1190,8 @@ namespace PupV1.Migrations
 
             modelBuilder.Entity("PupV1.Models.Breedtype", b =>
                 {
+                    b.Navigation("BreedSpecializations");
+
                     b.Navigation("Litters");
                 });
 
@@ -1088,6 +1209,11 @@ namespace PupV1.Migrations
             modelBuilder.Entity("PupV1.Models.Litter", b =>
                 {
                     b.Navigation("Puppies");
+                });
+
+            modelBuilder.Entity("PupV1.Models.Puppy", b =>
+                {
+                    b.Navigation("Puppyrequests");
                 });
 
             modelBuilder.Entity("PupV1.Models.Skill", b =>

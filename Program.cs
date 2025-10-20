@@ -47,7 +47,7 @@ static async Task SeedRolesAsync(IServiceProvider serviceProvider)
 {
     var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roles = { "Trainer","Client" };
+    string[] roles = { "Trainer","Client", "Breeder"};
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
@@ -68,6 +68,11 @@ using (var scope = app.Services.CreateScope())
     {
         await roleManager.CreateAsync(new IdentityRole("Client"));
     }
+    if (!await roleManager.RoleExistsAsync("Breeder"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Breeder"));
+    }
+
     /*try
     {
         await SeedRolesAsync(services);
@@ -89,3 +94,8 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    BreedSeeder.SeeBreeds(context);
+}

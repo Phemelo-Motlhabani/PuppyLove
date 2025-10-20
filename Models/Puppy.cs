@@ -23,6 +23,7 @@ public partial class Puppy
 
     [StringLength(25)]
     public string? PuppyName { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     public int? Age { get; set; }
 
@@ -31,6 +32,7 @@ public partial class Puppy
 
     [StringLength(10)]
     public string? Colour { get; set; }
+    public decimal? Weight { get; set; }
 
     [StringLength(1)]
     public string? Gender { get; set; }
@@ -38,14 +40,39 @@ public partial class Puppy
     [StringLength(2)]
     public string? Size { get; set; }
 
-    public double? Price { get; set; }
+    public decimal? Price { get; set; }
+    public string ? Status { get; set; }
+
 
     [StringLength(1)]
     public string? SaleStatus { get; set; }
+    [StringLength(50)]
+    public string? HealthStatus { get; set; }
+    [StringLength(1)]
+    [Display(Name = "Vaccinated")]
+    public string? Vaccinated { get; set; } 
+
+    [Display(Name = "Vaccination Date")]
+    [DataType(DataType.Date)]
+    public DateTime? VaccinationDate { get; set; }
+
+    [StringLength(50)]
+    [Display(Name = "Microchip Number")]
+    public string? MicrochipNumber { get; set; }
+
     public string? ImageUrl { get; set; }
+
+    [Display(Name = "Created Date")]
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+    [Display(Name = "Sold Date")]
+    [DataType(DataType.Date)]
+    public DateTime? SoldDate { get; set; }
 
     [NotMapped]
     public IFormFile? ImageFile { get; set; }
+    [NotMapped]
+    public List<IFormFile>? ImageFiles { get; set; }
 
     [ForeignKey("ClientId")]
     [InverseProperty("Puppies")]
@@ -54,4 +81,7 @@ public partial class Puppy
     [ForeignKey("LitterId")]
     [InverseProperty("Puppies")]
     public virtual Litter? Litter { get; set; }
+
+    [InverseProperty("Puppy")]
+    public virtual ICollection<Puppyrequest>? Puppyrequests { get; set; } = new List<Puppyrequest>();
 }

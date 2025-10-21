@@ -76,6 +76,10 @@ namespace PupV1.Controllers
 
             if (!ModelState.IsValid)
             {
+                var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                  .Select(e => e.ErrorMessage)
+                                  .ToList();
+                Console.WriteLine(string.Join(", ", errors));
                 await PopulateLitterDropdown(model, user.BreederId.Value);
                 return View(model);
             }
@@ -141,6 +145,7 @@ namespace PupV1.Controllers
                 CreatedDate = DateTime.Now
             };
             _context.Puppies.Add(puppy);
+            puppy.BreederId = user.BreederId;
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"{model.PuppyName} has been registered.";

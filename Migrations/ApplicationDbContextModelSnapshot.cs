@@ -508,6 +508,10 @@ namespace PupV1.Migrations
                     b.Property<int?>("Age")
                         .HasColumnType("int");
 
+                    b.Property<int?>("BreederId")
+                        .HasColumnType("int")
+                        .HasColumnName("BreederID");
+
                     b.Property<int?>("ClientId")
                         .HasColumnType("int")
                         .HasColumnName("ClientID");
@@ -577,6 +581,8 @@ namespace PupV1.Migrations
                         .HasColumnType("decimal(65,30)");
 
                     b.HasKey("PuppyId");
+
+                    b.HasIndex("BreederId");
 
                     b.HasIndex(new[] { "ClientId" }, "fk_Puppy_Client");
 
@@ -1063,6 +1069,10 @@ namespace PupV1.Migrations
 
             modelBuilder.Entity("PupV1.Models.Puppy", b =>
                 {
+                    b.HasOne("PupV1.Models.Breeder", "Breeder")
+                        .WithMany("Puppies")
+                        .HasForeignKey("BreederId");
+
                     b.HasOne("PupV1.Models.Client", "Client")
                         .WithMany("Puppies")
                         .HasForeignKey("ClientId");
@@ -1070,6 +1080,8 @@ namespace PupV1.Migrations
                     b.HasOne("PupV1.Models.Litter", "Litter")
                         .WithMany("Puppies")
                         .HasForeignKey("LitterId");
+
+                    b.Navigation("Breeder");
 
                     b.Navigation("Client");
 
@@ -1182,6 +1194,8 @@ namespace PupV1.Migrations
                     b.Navigation("BreedSpecializations");
 
                     b.Navigation("Litters");
+
+                    b.Navigation("Puppies");
 
                     b.Navigation("Puppyrequests");
 

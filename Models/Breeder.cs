@@ -58,6 +58,9 @@ public partial class Breeder
     public virtual ICollection<Puppyrequest> Puppyrequests { get; set; } = new List<Puppyrequest>();
 
     [InverseProperty("Breeder")]
+    public virtual ICollection<Puppy> Puppies { get; set; } = new List<Puppy>();
+
+    [InverseProperty("Breeder")]
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     [InverseProperty("Breeder")]

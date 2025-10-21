@@ -12,7 +12,20 @@
 
         <form asp-action="Register" method="post" enctype="multipart/form-data" class="mt-4">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach (var state in ViewData.ModelState)
+                            {
+                                foreach (var error in state.Value.Errors)
+                                {
+                                    <li>@state.Key: @error.ErrorMessage</li>
+                                }
+                            }
+                        </ul>
+                    </div>
+                }
             <div class="form-group mb-3">
                 <label asp-for="LitterId"></label>
                 <select asp-for="LitterId" class="form-select">
@@ -114,6 +127,17 @@
                           placeholder="Describe the puppy's personality, temperament, etc."></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Size"></label>
+                    <select asp-for="Size" class="form-select">
+                        <option value="">-- Select Size --</option>
+                        <option value="Small">Small</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Large">Large</option>
+                    </select>
+                    <span asp-validation-for="Size" class="text-danger"></span>
+                </div>
 
             <div class="form-group mb-3">
                 <label asp-for="ImageFiles">Puppy Photos</label>

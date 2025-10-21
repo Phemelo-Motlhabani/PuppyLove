@@ -13,6 +13,10 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
+      "Id": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\wwwroot\\images\\puppies\\a6bb4711-4e7e-40e7-837d-c5e856c82893_default-profile.jpg",
+      "PackagePath": "staticwebassets\\images\\puppies\\a6bb4711-4e7e-40e7-837d-c5e856c82893_default-profile.jpg"
+    },
+    {
       "Id": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

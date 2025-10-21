@@ -21,34 +21,37 @@ public partial class Puppy
     [Column("ClientID")]
     public int? ClientId { get; set; }
 
+    [Column("BreederID")]
+    public int? BreederId { get; set; }
+
     [StringLength(25)]
     public string? PuppyName { get; set; }
     public DateTime? DateOfBirth { get; set; }
 
     public int? Age { get; set; }
 
-    [StringLength(1)]
+    [StringLength(20)]
     public string? TrainingStatus { get; set; }
 
-    [StringLength(10)]
+    [StringLength(50)]
     public string? Colour { get; set; }
     public decimal? Weight { get; set; }
 
-    [StringLength(1)]
+    [StringLength(20)]
     public string? Gender { get; set; }
 
-    [StringLength(2)]
+    [StringLength(20)]
     public string? Size { get; set; }
 
     public decimal? Price { get; set; }
     public string ? Status { get; set; }
 
 
-    [StringLength(1)]
+    [StringLength(20)]
     public string? SaleStatus { get; set; }
     [StringLength(50)]
     public string? HealthStatus { get; set; }
-    [StringLength(1)]
+    [StringLength(20)]
     [Display(Name = "Vaccinated")]
     public string? Vaccinated { get; set; } 
 
@@ -77,6 +80,10 @@ public partial class Puppy
     [ForeignKey("ClientId")]
     [InverseProperty("Puppies")]
     public virtual Client? Client { get; set; }
+
+    [ForeignKey("BreederId")]
+    [InverseProperty("Puppies")]
+    public virtual Breeder? Breeder { get; set; }
 
     [ForeignKey("LitterId")]
     [InverseProperty("Puppies")]

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "hk5PZsmW8pN7wZ8hKIQ6AVAZ/Jjh4aeijblDbAzRJeY=",
+  "Hash": "Lj6NwgML33GwsllNiFo0WnYNwTaEXNBKBla4PRxyuy8=",
   "Source": "PupV1",
   "BasePath": "_content/PupV1",
   "Mode": "Default",
@@ -91,6 +91,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\wwwroot\\images\\puppies\\a6bb4711-4e7e-40e7-837d-c5e856c82893_default-profile.jpg",
+      "SourceId": "PupV1",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\wwwroot\\",
+      "BasePath": "_content/PupV1",
+      "RelativePath": "images/puppies/a6bb4711-4e7e-40e7-837d-c5e856c82893_default-profile.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\puppies\\a6bb4711-4e7e-40e7-837d-c5e856c82893_default-profile.jpg"
     },
     {
       "Identity": "C:\\Users\\Marais\\Documents\\Buntu\\PuppyLove\\GitVersion\\wwwroot\\js\\site.js",

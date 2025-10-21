@@ -79,6 +79,11 @@ using (var scope = app.Services.CreateScope())
     }
     catch (Exception ex) { Console.WriteLine("error"+ex.Message); }*/
 }
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    BreedSeeder.SeeBreeds(context);
+}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -94,8 +99,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    BreedSeeder.SeeBreeds(context);
-}
+

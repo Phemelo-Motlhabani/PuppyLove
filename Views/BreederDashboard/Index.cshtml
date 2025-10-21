@@ -28,6 +28,99 @@
     <button class="btn btn-primary" onclick="toggleProfile()">View</button>
 
     <div id="profileDiv" style="display:none; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 20px;background-color:#f0f8ff;">
+        <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Name</label>
+                <input asp-for="Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Surname</label>
+                <input asp-for="Surname" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Suburb</label>
+                <input asp-for="Suburb" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>City</label>
+                <input asp-for="City" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input asp-for="CellNUm" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Kennel Name</label>
+                <input asp-for="KennelName" class="form-control" />
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ImageFile">Upload Image</label>
+                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="Username" />
+            <button type="submit" class="btn btn-success mt-2">Update Profile</button>
+            <button type="button" class="btn btn-secondary mt-2" onclick="toggleProfile()">Cancel</button>
+        </form>
+    </div>
+
+    <!-- Dashboard cards outside the form -->
+    <div class="row mt-4">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm border-success">
+                <div class="card-body text-center">
+                    <div class="display-1 text-success mb-3">
+                        <i class="bi bi-collection"></i>
+                    </div>
+                    <h5 class="card-title">My Litters</h5>
+                    <p class="card-text">Manage your litters and track puppies</p>
+                    <a href="@Url.Action("Index", "Litter")" class="btn btn-success w-100">
+                        <i class="bi bi-eye"></i> View Litters
+                    </a>
+                    <a href="@Url.Action("Create", "Litter")" class="btn btn-outline-success w-100 mt-2">
+                        <i class="bi bi-plus-circle"></i> Add New Litter
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card h-100 shadow-sm border-info">
+                <div class="card-body text-center">
+                    <div class="display-1 text-info mb-3">
+                        <i class="bi bi-heart-fill"></i>
+                    </div>
+                    <h5 class="card-title">Puppies</h5>
+                    <p class="card-text">Register and manage your puppies</p>
+                    <a href="@Url.Action("Index", "Puppy")" class="btn btn-info w-100">
+                        <i class="bi bi-grid"></i> View All Puppies
+                    </a>
+                    <a href="@Url.Action("Create", "Puppy")" class="btn btn-outline-info w-100 mt-2">
+                        <i class="bi bi-plus-circle"></i> Register New Puppy
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script>
+            function toggleProfile() {
+                var profileDiv = document.getElementById('profileDiv');
+                if (profileDiv.style.display === 'none') {
+                    profileDiv.style.display = 'block';
+                    profileDiv.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    profileDiv.style.display = 'none';
+                }
+            }
+        </script>
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
+    }
+    </div>
+    @*<div id="profileDiv" style="display:none; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 20px;background-color:#f0f8ff;">
         <form asp-action="UpdateProfile" method="post">
             <div class="form-group">
                 <label>Name</label>
@@ -64,12 +157,49 @@
         </form>
     </div>
 </div>
+
+
+<div class="col-md-6 col-lg-4 mb-4">
+    <div class="card h-100 shadow-sm border-success">
+        <div class="card-body text-center">
+            <div class="display-1 text-success mb-3">
+                <i class="bi bi-collection"></i>
+            </div>
+            <h5 class="card-title">My Litters</h5>
+            <p class="card-text">Manage your litters and track puppies</p>
+            <a asp-controller="Litter" asp-action="Index" class="btn btn-success w-100">
+                <i class="bi bi-eye"></i> View Litters
+            </a>
+            <a href="@Url.Action("Create", "Litter")" class="btn btn-outline-success w-100 mt-2" onclick="event.stopPropagation();">
+                <i class="bi bi-plus-circle"></i> Add New Litter
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-6 col-lg-4 mb-4">
+    <div class="card h-100 shadow-sm border-info">
+        <div class="card-body text-center">
+            <div class="display-1 text-info mb-3">
+                <i class="bi bi-heart-fill"></i>
+            </div>
+            <h5 class="card-title">Puppies</h5>
+            <p class="card-text">Register and manage your puppies</p>
+            <a asp-controller="Litter" asp-action="Index" class="btn btn-info w-100">
+                <i class="bi bi-grid"></i> View All Puppies
+            </a>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     <script>
         function toggleProfile() {
             var profileDiv = document.getElementById('profileDiv');
             if (profileDiv.style.display === 'none') {
                 profileDiv.style.display = 'block';
+                profileDiv.scrollIntoView({behaviour: 'smooth'})
             } else {
                 profileDiv.style.display = 'none';
             }
@@ -78,4 +208,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}
+}*@

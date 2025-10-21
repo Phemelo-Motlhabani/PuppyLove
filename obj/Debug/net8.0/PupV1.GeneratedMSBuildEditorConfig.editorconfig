@@ -114,12 +114,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl0dGVyXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Litter/RegisterPup.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGl0dGVyXFJlZ2lzdGVyUHVwLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/ParkRecommendation/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFya1JlY29tbWVuZGF0aW9uXENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Puppy/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlcUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Shared/Error.cshtml]

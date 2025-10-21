@@ -53,6 +53,7 @@ namespace PupV1.Controllers
             {
                 AvailableBreeds = breeds,
                 BirthDate = DateTime.Now,
+                NumPuppies = 1
             };
             return View(model);
         }
@@ -60,8 +61,12 @@ namespace PupV1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateLitterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"Validation error: {error.ErrorMessage}");
+                }
                 model.AvailableBreeds = await _context.Breedtypes
                     .OrderBy(b => b.BreedName)
                     .ToListAsync();

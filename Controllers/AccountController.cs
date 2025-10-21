@@ -176,10 +176,6 @@ namespace PupV1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RegisterAsBreeder(BreederRegisterViewModel model)
         {
-            Console.WriteLine("==================== REGISTER ACTION HIT ====================");
-            Console.WriteLine($"Username: {model.Username}");
-            Console.WriteLine($"Email: {model.Email}");
-
             if (!ModelState.IsValid)
             {
                 foreach (var error in ModelState.Values.SelectMany(v => v.Errors))

@@ -5,10 +5,12 @@
 @{
     ViewData["Title"] = "Register as Breeder";
 }
-<h2>Register as a Breeder</h2>
 
+<div class="container mt-4">
 <div class="row">
     <div class="col-md-6 offset-md-3">
+        <h2>Register as a Breeder</h2>
+
         <form asp-action="RegisterAsBreeder"  asp-controller="Account" method="post">
             @Html.AntiForgeryToken()
            
@@ -105,6 +107,7 @@
             <p>Already have an account? <a asp-action="Login">Login here</a></p>
         </div>
     </div>
+</div>
 </div>
 
 @section Scripts {

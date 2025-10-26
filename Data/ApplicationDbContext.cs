@@ -22,7 +22,7 @@ namespace PupV1.Data
         public DbSet<PuppyDetails>PuppyDetailss { get; set; }
         public DbSet<Puppyrequest>Puppyrequests { get; set; }
         public DbSet<Review>Reviews { get; set; }
-        public DbSet<BreedSpecialization> breedSpecializations { get; set; }
+        public DbSet<BreedSpecialization> BreedSpecializations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -52,5 +52,6 @@ namespace PupV1.Data
                 new Skill { SkillId = 10, SkillName = "Impluse Control Training" }
                 );
         }
+       
     }
 }

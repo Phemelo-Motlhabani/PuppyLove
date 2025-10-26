@@ -10,7 +10,7 @@ namespace PupV1.Models
         public string? city { get; set; }
         public string? suburb {  get; set; }
         public string? CellNum { get; set; }
-        public string? username { get; set; }
+        public string username { get; set; }
         public IFormFile? ImageFile { get; set; }
 
         [Required]

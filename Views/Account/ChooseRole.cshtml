@@ -1,11 +1,195 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿
 @{
+    ViewData["Title"] = "Choose Your Role";
 }
-<h2>Register AS:</h2>
-<div>
-    <a asp-action="RegisterAsClient" class="btn btn-primary">Client</a>
-    <a asp-action="RegisterAsTrainer" class="btn btn-success">Trainer</a>
-    <a asp-action="RegisterAsBreeder" class="btn btn-secondary">Breeder</a>
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold text-primary">
+            <i class="bi bi-person-plus-fill"></i> Join PuppyLove
+        </h1>
+        <p class="lead text-muted">Choose how you'd like to be part of our community</p>
+    </div>
+
+   
+    <div class="row justify-content-center g-4">
+        <div class="col-md-4">
+            <div class="card h-100 border-primary shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="role-icon mb-4">
+                        <div class="icon-circle bg-primary bg-opacity-10 mx-auto">
+                            <i class="bi bi-heart-fill text-primary display-3"></i>
+                        </div>
+                    </div>
+                    <h3 class="card-title mb-3">Client</h3>
+                    <p class="card-text text-muted mb-4">
+                        Find your perfect puppy companion and connect with professional trainers for your furry friend.
+                    </p>
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Browse available puppies
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Request puppy adoptions
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Find dog trainers
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Leave reviews
+                        </li>
+                    </ul>
+                    <a asp-action="RegisterAsClient" class="btn btn-primary w-100 btn-lg">
+                        <i class="bi bi-person-check"></i> Register as Client
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-md-4">
+            <div class="card h-100 border-success shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="role-icon mb-4">
+                        <div class="icon-circle bg-success bg-opacity-10 mx-auto">
+                            <i class="bi bi-award-fill text-success display-3"></i>
+                        </div>
+                    </div>
+                    <h3 class="card-title mb-3">Trainer</h3>
+                    <p class="card-text text-muted mb-4">
+                        Offer your professional dog training services and help owners build strong bonds with their dogs.
+                    </p>
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Receive training requests
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Manage training sessions
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Track client progress
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Build your reputation
+                        </li>
+                    </ul>
+                    <a asp-action="RegisterAsTrainer" class="btn btn-success w-100 btn-lg">
+                        <i class="bi bi-person-check"></i> Register as Trainer
+                    </a>
+                </div>
+            </div>
+        </div>
+
+       
+        <div class="col-md-4">
+            <div class="card h-100 border-warning shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="role-icon mb-4">
+                        <div class="icon-circle bg-warning bg-opacity-10 mx-auto">
+                            <i class="bi bi-house-heart-fill text-warning display-3"></i>
+                        </div>
+                    </div>
+                    <h3 class="card-title mb-3">Breeder</h3>
+                    <p class="card-text text-muted mb-4">
+                        Showcase your kennel and connect responsible breeders with loving families seeking puppies.
+                    </p>
+                    <ul class="list-unstyled text-start mb-4">
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Manage litters
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Register puppies
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Handle adoption requests
+                        </li>
+                        <li class="mb-2">
+                            <i class="bi bi-check-circle-fill text-success"></i> Build trust with clients
+                        </li>
+                    </ul>
+                    <a asp-action="RegisterAsBreeder" class="btn btn-warning w-100 btn-lg">
+                        <i class="bi bi-person-check"></i> Register as Breeder
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="text-center mt-5">
+        <div class="card border-0 bg-light">
+            <div class="card-body py-4">
+                <p class="mb-2 text-muted">Already have an account?</p>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">
+                    <i class="bi bi-box-arrow-in-right"></i> Login Here
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+   
+    .icon-circle {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+    }
+
+   
+    .hover-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175) !important;
+    }
+
+    .hover-card:hover .icon-circle {
+        transform: scale(1.1);
+    }
+
+    
+    .role-icon {
+        transition: transform 0.3s ease;
+    }
+
+   
+    .card-title {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    
+    .list-unstyled li {
+        font-size: 0.95rem;
+    }
+
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+    }
+
+    
+    media (max-width: 767px) {
+        .col-md-4 {
+            margin-bottom: 1.5rem;
+        }
+
+        .icon-circle {
+            width: 100px;
+            height: 100px;
+        }
+
+        .icon-circle i {
+            font-size: 2.5rem !important;
+        }
+    }
+</style>

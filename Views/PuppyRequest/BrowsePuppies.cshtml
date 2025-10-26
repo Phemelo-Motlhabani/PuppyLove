@@ -1,0 +1,110 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<PupV1.Models.Puppy>
+@{
+    ViewData["Title"] = "Browse Puppies";
+}
+<div class="container mt-4">
+    <h2><i class="bi bi-heart-fill"></i> Available Puppies</h2>
+    <p class="lead text-muted">Find your perfect companion!</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <h4><i class="bi bi-info-circle"></i> No Puppies Available</h4>
+            <p>There are currently no puppies available. Please check back later!</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var puppy in Model)
+            {
+                var ageInWeeks = puppy.DateOfBirth.HasValue && puppy.DateOfBirth.Value > DateTime.MinValue
+                ? (int)((DateTime.Now - puppy.DateOfBirth.Value).TotalDays / 7)  
+                : 0;
+
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="@puppy.ImageUrl" class="card-img-top" alt="@puppy.PuppyName"
+                             style="height: 250px; object-fit: cover;" />
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @puppy.PuppyName
+                                @if (puppy.Gender == "M")
+                                {
+                                    <i class="bi bi-gender-male text-primary"></i>
+                                }
+                                else if (puppy.Gender == "F")
+                                {
+                                    <i class="bi bi-gender-female text-danger"></i>
+                                }
+                            </h5>
+
+                            <p class="card-text">
+                                <strong>Breed:</strong> @puppy.Litter?.BreedType?.BreedName<br />
+                                @if (puppy.DateOfBirth.HasValue)
+                                {
+                                    <span><strong>Age:</strong> @ageInWeeks weeks<br /></span>
+                                }
+                                <strong>Color:</strong> @puppy.Colour<br />
+                                @if (puppy.Weight.HasValue)
+                                {
+                                    <span><strong>Weight:</strong> @puppy.Weight kg<br /></span>
+                                }
+                                <strong>Breeder:</strong> @puppy.Litter?.Breeder?.Fname @puppy.Litter?.Breeder?.Lname<br />
+                                <strong>Location:</strong> @puppy.Litter?.Breeder?.City
+                            </p>
+
+                            <h4 class="text-success">R @puppy.Price?.ToString("N2")</h4>
+
+                            <div class="mb-2">
+                                @if (puppy.Vaccinated == "Y")
+                                {
+                                    <span class="badge bg-success me-1"><i class="bi bi-shield-check"></i> Vaccinated</span>
+                                }
+                                @if (!string.IsNullOrEmpty(puppy.MicrochipNumber))
+                                {
+                                    <span class="badge bg-info"><i class="bi bi-cpu"></i> Microchipped</span>
+                                }
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(puppy.Description))
+                            {
+                                <p class="card-text">
+                                    <small>@(puppy.Description.Length > 100 ? puppy.Description.Substring(0, 100) + "..." : puppy.Description)</small>
+                                </p>
+                            }
+
+                            <a asp-action="RequestPuppy" asp-route-id="@puppy.PuppyId" class="btn btn-primary w-100">
+                                <i class="bi bi-envelope"></i> Request This Puppy
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+<div class="text-center mt-4">
+    <button type="button" class="btn btn-outline-primary px-4" onclick="history.back()">
+        <i class="bi bi-arrow-left"></i> Back
+    </button>
+</div>

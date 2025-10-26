@@ -1,24 +1,295 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model PupV1.Models.ClientDashboardViewModel
+﻿@model PupV1.Models.ClientDashboardViewModel
 @{
     ViewData["Title"] = "My Dashboard";
 }
-<h2>Welcome, @Model.Fname!</h2>
 
-<div class="card shadow-sm p-3" style="max-width: 800px;">
-    <!--<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">-->
-    <div>
-        <p><strong>Name:</strong> @Model.Fname</p>
-        <p><strong>Surname:</strong> @Model.Lname</p>
-        <p><strong>Suburb:</strong> @Model.Suburb</p>
-        <p><strong>City:</strong> @Model.City</p>
-        <p><strong>Phone Number:</strong> @Model.CellNum</p>
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="background-color: #667eea;">
+                <div class="card-body text-white py-4">
+                    <h1 class="display-5 mb-0 text-white">
+                        <i class="bi bi-person-circle"></i> Welcome, @Model.Fname!
+                    </h1>
+                    <p class="lead mb-0 text-white opacity-75">Your personalized puppy adoption dashboard</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <!--
-    <button class="btn btn-primary" onclick="toggleProfile()">View</button>
-    -->
-    <form method="get" action="~/Identity/Account/Manage">
-        <button type="submit" class="btn btn-primary">Update</button>
-    </form>
+
+    <div class="row">
+       
+        <div class="col-lg-4 mb-4">
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0"><i class="bi bi-person-badge"></i> Your Profile</h5>
+                </div>
+                <div class="card-body text-center">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Model.ImageUrl" class="rounded-circle mb-3 border border-3 border-primary"
+                             style="width: 150px; height: 150px; object-fit: cover;" alt="Profile Picture" />
+                    }
+                    else
+                    {
+                        <div class="rounded-circle mb-3 border border-3 border-primary d-inline-flex align-items-center justify-content-center bg-light"
+                             style="width: 150px; height: 150px;">
+                            <i class="bi bi-person-fill display-1 text-muted"></i>
+                        </div>
+                    }
+
+                    <div id="infoDiv">
+                        <h4 class="mb-1">@Model.Fname @Model.Lname</h4>
+                        <p class="text-muted mb-3">
+                            <i class="bi bi-geo-alt"></i> @Model.Suburb, @Model.City
+                        </p>
+                        <p class="mb-0">
+                            <i class="bi bi-telephone"></i> @Model.CellNum
+                        </p>
+
+                        <button class="btn btn-outline-primary mt-3 w-100" type="button" onclick="toggleProfile()">
+                            <i class="bi bi-pencil"></i> Edit Profile
+                        </button>
+                    </div>
+
+                    
+                    <div id="profileDiv" style="display:none;" class="mt-3 text-start">
+                        <hr />
+                        <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+                            <div class="mb-3">
+                                <label asp-for="Fname" class="form-label">First Name</label>
+                                <input asp-for="Fname" class="form-control" />
+                                <span asp-validation-for="Fname" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Lname" class="form-label">Last Name</label>
+                                <input asp-for="Lname" class="form-control" />
+                                <span asp-validation-for="Lname" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Suburb" class="form-label">Suburb</label>
+                                <input asp-for="Suburb" class="form-control" />
+                                <span asp-validation-for="Suburb" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="City" class="form-label">City</label>
+                                <input asp-for="City" class="form-control" />
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="CellNum" class="form-label">Phone Number</label>
+                                <input asp-for="CellNum" class="form-control" />
+                                <span asp-validation-for="CellNum" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="ImageFile" class="form-label">Upload New Image</label>
+                                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                            </div>
+
+                            <input type="hidden" asp-for="Username" />
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-save"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="toggleProfile()">
+                                    <i class="bi bi-x"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0"><i class="bi bi-lightning-fill text-warning"></i> Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100 border-primary shadow-sm hover-lift">
+                                <div class="card-body text-center">
+                                    <div class="display-3 text-primary mb-3">
+                                        <i class="bi bi-heart-fill"></i>
+                                    </div>
+                                    <h5 class="card-title fw-bold">Browse Puppies</h5>
+                                    <p class="card-text text-muted">Find your perfect companion from available puppies</p>
+                                    <a asp-controller="PuppyRequest" asp-action="BrowsePuppies" class="btn btn-primary w-100">
+                                        <i class="bi bi-search"></i> Browse Now
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100 border-success shadow-sm hover-lift">
+                                <div class="card-body text-center">
+                                    <div class="display-3 text-success mb-3">
+                                        <i class="bi bi-inbox-fill"></i>
+                                    </div>
+                                    <h5 class="card-title fw-bold">My Requests</h5>
+                                    <p class="card-text text-muted">Track and manage your puppy adoption requests</p>
+                                    <a asp-controller="PuppyRequest" asp-action="MyRequests" class="btn btn-success w-100">
+                                        <i class="bi bi-envelope-open"></i> View Requests
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100 border-warning shadow-sm hover-lift">
+                                <div class="card-body text-center">
+                                    <div class="display-3 text-warning mb-3">
+                                        <i class="bi bi-award-fill"></i>
+                                    </div>
+                                    <h5 class="card-title fw-bold">Review Trainers</h5>
+                                    <p class="card-text text-muted">Share your experience with dog trainers</p>
+                                    <a asp-controller="Review" asp-action="BrowseTrainers" class="btn btn-warning w-100">
+                                        <i class="bi bi-star-fill"></i> Review Trainers
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100 border-info shadow-sm hover-lift">
+                                <div class="card-body text-center">
+                                    <div class="display-3 text-info mb-3">
+                                        <i class="bi bi-heart-fill"></i>
+                                    </div>
+                                    <h5 class="card-title fw-bold">Review Breeders</h5>
+                                    <p class="card-text text-muted">Share your experience with dog breeders</p>
+                                    <a asp-controller="Review" asp-action="BrowseBreeders" class="btn btn-info w-100">
+                                        <i class="bi bi-star-fill"></i> Review Breeders
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0"><i class="bi bi-lightbulb-fill text-warning"></i> Helpful Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-check-circle-fill text-primary fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Research Breeds</h6>
+                                    <p class="text-muted small mb-0">Learn about different breeds to find the perfect match for your lifestyle</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-shield-check text-success fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Meet Before Adopting</h6>
+                                    <p class="text-muted small mb-0">Always meet the puppy and breeder in person before making a decision</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-heart-fill text-warning fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Early Training</h6>
+                                    <p class="text-muted small mb-0">Consider booking a trainer early for the best results with your new puppy</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-star-fill text-info fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Leave Reviews</h6>
+                                    <p class="text-muted small mb-0">Help others by sharing your experiences with trainers and breeders</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function toggleProfile() 
+        {
+            const infoDiv = document.getElementById("infoDiv");
+            const profileDiv = document.getElementById("profileDiv");
+            const isHidden = profileDiv.style.display === "none" || profileDiv.style.display === "";
+
+            if (isHidden) 
+            {
+                profileDiv.style.display = "block";
+                infoDiv.style.display = "none";
+                setTimeout(function () 
+                {
+                    profileDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            } 
+            else 
+            {
+                profileDiv.style.display = "none";
+                infoDiv.style.display = "block";
+            }
+        }
+    </script>
+
+    <style>
+        .hover-lift {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+            .hover-lift:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+            }
+    </style>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

@@ -20,54 +20,7 @@ namespace PupV1.Controllers
             _env = env;
             _userManager = userManager;
         }
-       /* [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Parkrecommendation park)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(park);
-            }
-
-            // ✅ Get the logged-in user
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            // ✅ Get the corresponding Trainer from the database
-            var trainer = await _context.Trainers.FirstOrDefaultAsync(t => t.Email == user.Email);
-            if (trainer == null)
-            {
-                ModelState.AddModelError("", "Trainer not found. Please register as a trainer.");
-                return View(park);
-            }
-
-            // ✅ Assign the correct TrainerID
-            park.TrainerId = trainer.TrainerId;
-
-            // ✅ Handle image upload
-            if (park.ImageFile != null)
-            {
-                string wwwRootPath = _env.WebRootPath;
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(park.ImageFile.FileName);
-                string path = Path.Combine(wwwRootPath, "uploads/parks/", fileName);
-
-                using (var filestream = new FileStream(path, FileMode.Create))
-                {
-                    await park.ImageFile.CopyToAsync(filestream);
-                }
-
-                park.ImageUrl = "/uploads/parks/" + fileName;
-            }
-
-            // ✅ Save record with valid TrainerID
-            _context.Add(park);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Index", "Dashboard");
-        }*/
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Trainer")]
@@ -98,18 +51,21 @@ namespace PupV1.Controllers
                 {
                     string wwwRootPath = _env.WebRootPath;
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(park.ImageFile.FileName);
-                    string uploadsFolder = Path.Combine(wwwRootPath, "uploads/parks/", fileName);
+                    string uploadsFolder = Path.Combine(_env.WebRootPath, "images", "uploads", "parks");
 
-                    if(!Directory.Exists(uploadsFolder))
+                    if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
                     }
-                    string path=Path.Combine(uploadsFolder, fileName);
-                    using (var filestream = new FileStream(path, FileMode.Create))
+
+                    string filePath = Path.Combine(uploadsFolder, fileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
                     {
-                        await park.ImageFile.CopyToAsync(filestream);
+                        await park.ImageFile.CopyToAsync(fileStream);
                     }
-                    park.ImageUrl = "/uploads/parks/" + fileName;
+
+                    park.ImageUrl = "/images/uploads/parks/" + fileName;
+                    
                 }
 
                 _context.Add(park);
@@ -118,7 +74,7 @@ namespace PupV1.Controllers
             }
             return View(park);
         }
-       // [Authorize(Roles = "Trainer")]
+       
         public IActionResult Create()
         {
             return View();

@@ -1,0 +1,138 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.TopRatedViewModel
+@{
+}
+@if (Model.TopTrainers.Any() || Model.TopBreeders.Any())
+{
+    <section class="py-5 bg-light">
+        <div class="container">
+           
+            @if (Model.TopTrainers.Any())
+            {
+                <h2 class="text-center mb-4"><i class="bi bi-award"></i> Top Rated Trainers</h2>
+                
+                <div id="trainersCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.TopTrainers.Count; i++)
+                        {
+                            var trainer = Model.TopTrainers[i];
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="card shadow">
+                                            <div class="card-body text-center">
+                                                <img src="@trainer.ImageUrl" class="rounded-circle mb-3" 
+                                                     alt="@trainer.ProviderName" style="width: 150px; height: 150px; object-fit: cover;" />
+                                                <h4>@trainer.ProviderName</h4>
+                                                <p class="text-muted"><i class="bi bi-geo-alt"></i> @trainer.City</p>
+                                                
+                                                <div class="mb-3">
+                                                    @for (int s = 1; s <= 5; s++)
+                                                    {
+                                                        if (s <= Math.Round(trainer.AverageRating))
+                                                        {
+                                                            <i class="bi bi-star-fill text-warning fs-4"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-star text-warning fs-4"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                                
+                                                <h3 class="text-warning">@trainer.AverageRating.ToString("F1") / 5.0</h3>
+                                                <p class="text-muted">Based on @trainer.TotalReviews reviews</p>
+                                                
+                                                <a asp-controller="Review" asp-action="BrowseTrainers" class="btn btn-primary">
+                                                    View All Trainers
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    
+                    @if (Model.TopTrainers.Count > 1)
+                    {
+                        <button class="carousel-control-prev" type="button" data-bs-target="#trainersCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#trainersCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    }
+                </div>
+            }
+            @if (Model.TopBreeders.Any())
+            {
+                <h2 class="text-center mb-4"><i class="bi bi-heart"></i> Top Rated Breeders</h2>
+
+                <div id="breedersCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.TopBreeders.Count; i++)
+                        {
+                            var breeder = Model.TopBreeders[i];
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <div class="row justify-content-center">
+                                    <div class="col-md-6">
+                                        <div class="card shadow">
+                                            <div class="card-body text-center">
+                                                <img src="@breeder.ImageUrl" class="rounded-circle mb-3"
+                                                     alt="@breeder.ProviderName" style="width: 150px; height: 150px; object-fit: cover;" />
+                                                <h4>@breeder.ProviderName</h4>
+                                                @if (!string.IsNullOrEmpty(breeder.KennelName))
+                                                {
+                                                    <p class="text-muted"><i class="bi bi-house"></i> @breeder.KennelName</p>
+                                                }
+                                                <p class="text-muted"><i class="bi bi-geo-alt"></i> @breeder.City</p>
+
+                                                <div class="mb-3">
+                                                    @for (int s = 1; s <= 5; s++)
+                                                    {
+                                                        if (s <= Math.Round(breeder.AverageRating))
+                                                        {
+                                                            <i class="bi bi-star-fill text-warning fs-4"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-star text-warning fs-4"></i>
+                                                        }
+                                                    }
+                                                </div>
+
+                                                <h3 class="text-warning">@breeder.AverageRating.ToString("F1") / 5.0</h3>
+                                                <p class="text-muted">Based on @breeder.TotalReviews reviews</p>
+
+                                                <a asp-controller="Review" asp-action="BrowseBreeders" class="btn btn-primary">
+                                                    View All Breeders
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    @if (Model.TopBreeders.Count > 1)
+                    {
+                        <button class="carousel-control-prev" type="button" data-bs-target="#breedersCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#breedersCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon bg-dark rounded-circle" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    }
+                </div>
+            }
+        </div>
+    </section>
+}

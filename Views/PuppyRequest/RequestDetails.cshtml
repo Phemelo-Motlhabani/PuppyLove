@@ -1,0 +1,115 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.Puppyrequest
+@{
+    ViewData["Title"] = "Request Details";
+}
+<div class="container mt-4">
+    @*<nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="BreederDashboard" asp-action="Index">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="IncomingRequests">Requests</a></li>
+            <li class="breadcrumb-item active">Request Details</li>
+        </ol>
+    </nav>*@
+
+    <h2><i class="bi bi-envelope-open"></i> Request Details</h2>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Puppy Information</h4>
+                </div>
+                <div class="card-body">
+                    <img src="@Model.Puppy?.ImageUrl" class="img-fluid rounded mb-3" alt="@Model.Puppy?.PuppyName" />
+                    <h5>@Model.Puppy?.PuppyName</h5>
+                    <p>
+                        <strong>Breed:</strong> @Model.Puppy?.Litter?.BreedType?.BreedName<br />
+                        <strong>Price:</strong> <span class="text-success fs-5">R @Model.Puppy?.Price?.ToString("N2")</span><br />
+                        <strong>Status:</strong>
+                        @if (Model.Puppy?.Status == "Available")
+                        {
+                            <span class="badge bg-success">Available</span>
+                        }
+                        else if (Model.Puppy?.Status == "Reserved")
+                        {
+                            <span class="badge bg-warning">Reserved</span>
+                        }
+                        else if (Model.Puppy?.Status == "Sold")
+                        {
+                            <span class="badge bg-secondary">Sold</span>
+                        }
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h4 class="mb-0">Client Information</h4>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Name:</strong> @Model.Client?.Fname @Model.Client?.Lname<br />
+                        <strong>Email:</strong> <a href="mailto:@Model.Client?.Email">@Model.Client?.Email</a><br />
+                        <strong>Phone:</strong> <a href="tel:@Model.Client?.CellNum">@Model.Client?.CellNum</a><br />
+                        <strong>Location:</strong> @Model.Client?.Suburb, @Model.Client?.City
+                    </p>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="mb-0">Request Information</h4>
+                </div>
+                <div class="card-body">
+                    <p>
+                        <strong>Status:</strong>
+                        @if (Model.Status == "Pending")
+                        {
+                            <span class="badge bg-warning">Pending</span>
+                        }
+                        else if (Model.Status == "Accepted")
+                        {
+                            <span class="badge bg-success">Accepted</span>
+                        }
+                        else if (Model.Status == "Rejected")
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+                        <br />
+                        <strong>Requested:</strong> @Model.RequestDate.ToString("MMMM dd, yyyy")<br />
+                        @if (Model.ResponseDate.HasValue)
+                        {
+                            <span><strong>Responded:</strong> @Model.ResponseDate.Value.ToString("MMMM dd, yyyy")</span>
+                        }
+                    </p>
+
+                    <hr />
+
+                    <div class="mb-3">
+                        <strong>Client's Message:</strong>
+                        <p class="text-muted">@Model.Message</p>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.BreederResponse))
+                    {
+                        <div class="alert alert-info">
+                            <strong>Your Response:</strong>
+                            <p class="mb-0">@Model.BreederResponse</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <a asp-action="IncomingRequests" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Requests
+        </a>
+    </div>
+</div>

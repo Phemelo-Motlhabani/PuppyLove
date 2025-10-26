@@ -88,7 +88,7 @@ public partial class ApplicationDbContextModel : IdentityDbContext<IdentityUser>
 
             entity.Property(e => e.LitterId).ValueGeneratedNever();
 
-            entity.HasOne(d => d.Breed).WithMany(p => p.Litters).HasConstraintName("fk_Litter_Breed");
+            entity.HasOne(d => d.Breeder).WithMany(p => p.Litters).HasConstraintName("fk_Litter_Breed");
 
             entity.HasOne(d => d.Breeder).WithMany(p => p.Litters).HasConstraintName("fk_Litter_Breeder");
         });

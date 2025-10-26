@@ -1,0 +1,85 @@
+﻿@model PupV1.Models.TrainingRequestViewModel
+
+@{
+    ViewData["Title"] = "Request Training";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">Request Training from @Model.TrainerName</h3>
+        </div>
+        <div class="card-body">
+            <form asp-action="SendRequest" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <input type="hidden" asp-for="TrainerId" />
+                <input type="hidden" asp-for="TrainerName" />
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DogName" class="form-label"></label>
+                        <input asp-for="DogName" class="form-control" placeholder="Enter your dog's name" />
+                        <span asp-validation-for="DogName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="DogBreed" class="form-label"></label>
+                    <select asp-for="DogBreed" class="form-control" asp-items="ViewBag.Breeds">
+                        <option value="">-- Select Breed --</option>
+                    </select>
+                    <span asp-validation-for="DogBreed" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="TrainingProgram" class="form-label"></label>
+                    <select asp-for="TrainingProgram" class="form-control">
+                        <option value="">-- Select Program --</option>
+                        <option value="Basic Obedience">Basic Obedience</option>
+                        <option value="Advanced Obedience">Advanced Obedience</option>
+                        <option value="Puppy Training">Puppy Training</option>
+                        <option value="Behavioral Modification">Behavioral Modification</option>
+                        <option value="Agility Training">Agility Training</option>
+                        <option value="Protection Training">Protection Training</option>
+                        <option value="Therapy Dog Training">Therapy Dog Training</option>
+                        <option value="Service Dog Training">Service Dog Training</option>
+                        <option value="Potty Training">Potty Training</option>
+                        <option value="Leash Training">Leash Training</option>
+                        <option value="Socialization">Socialization</option>
+                        <option value="Custom Program">Custom Program</option>
+                    </select>
+                    <span asp-validation-for="TrainingProgram" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="AdditionalInfo" class="form-label"></label>
+                    <textarea asp-for="AdditionalInfo" class="form-control" rows="4"
+                              placeholder="Any behavioral issues, medical conditions, specific goals, or other information the trainer should know..."></textarea>
+                    <span asp-validation-for="AdditionalInfo" class="text-danger"></span>
+                </div>
+
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>Note:</strong> The trainer will review your request and respond within 24-48 hours.
+                    You can only have one pending request per trainer at a time.
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send"></i> Send Request
+                    </button>
+                    <a asp-controller="Review" asp-action="BrowseTrainers" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Trainers
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

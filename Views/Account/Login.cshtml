@@ -15,7 +15,12 @@
 
     <div class="form-group">
         <label asp-for="password">Password</label>
+        <div class="input-group">
         <input asp-for="password" class="form-control" />
+        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+            <i class="bi bi-eye" id="passwordIcon"></i>
+        </button>
+        </div>
         <span asp-validation-for="password" class="text-danger"></span>
     </div>
 
@@ -27,3 +32,28 @@
     <button type="submit" class="btn btn-primary">Login</button>
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
+@section Scripts {
+    <script>
+       
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        const passwordIcon = document.getElementById('passwordIcon');
+
+        if (togglePassword && password) {
+            togglePassword.addEventListener('click', function() {
+               
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                
+                
+                if (type === 'password') {
+                    passwordIcon.classList.remove('bi-eye-slash');
+                    passwordIcon.classList.add('bi-eye');
+                } else {
+                    passwordIcon.classList.remove('bi-eye');
+                    passwordIcon.classList.add('bi-eye-slash');
+                }
+            });
+        }
+        </script>
+}

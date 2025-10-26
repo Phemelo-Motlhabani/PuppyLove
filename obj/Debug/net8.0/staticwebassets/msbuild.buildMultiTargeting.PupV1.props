@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\PupV1.props" />
-</Project>

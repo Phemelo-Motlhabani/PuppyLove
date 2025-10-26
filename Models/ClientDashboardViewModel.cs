@@ -8,6 +8,8 @@
         public string? Suburb { get; set; }
         public string? CellNum { get; set; }
         public string? Username { get; set; }
+        public string? ImageUrl { get; set; }
+        public IFormFile? ImageFile { get; set; }
 
         public List<Trainingrequest> TrainingRequests { get; set; }
     }

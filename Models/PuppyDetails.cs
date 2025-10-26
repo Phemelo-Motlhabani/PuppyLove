@@ -19,6 +19,6 @@ namespace PupV1.Models
         public int BreederId { get; set; }
 
         public string? ImageUrl { get; set; }
-        public double? Price { get; set; }
+        public decimal? Price { get; set; }
     }
 }

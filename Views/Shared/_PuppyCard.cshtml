@@ -1,0 +1,100 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.Puppy
+@{
+    var ageInWeeks = Model.DateOfBirth.HasValue
+        ? (int)((DateTime.Now - Model.DateOfBirth.Value).TotalDays / 7)
+        : 0;
+}
+<div class="col-md-6 col-lg-4 mb-4">
+    <div class="card h-100 shadow-sm">
+        <img src="@Model.ImageUrl" class="card-img-top" alt="@Model.PuppyName"
+             style="height: 250px; object-fit: cover;" />
+        <div class="card-body">
+            <h5 class="card-title">
+                @Model.PuppyName
+                @if (Model.Gender == "M")
+                {
+                    <i class="bi bi-gender-male text-primary"></i>
+                }
+                else if (Model.Gender == "F")
+                {
+                    <i class="bi bi-gender-female text-danger"></i>
+                }
+            </h5>
+
+            <p class="card-text mb-2">
+                <strong>Breed:</strong> @Model.Litter?.BreedType?.BreedName<br />
+                @if (Model.DateOfBirth.HasValue)
+                {
+                    <span><strong>Age:</strong> @ageInWeeks weeks<br /></span>
+                }
+                <strong>Color:</strong> @Model.Colour<br />
+                @if (Model.Weight.HasValue)
+                {
+                    <span><strong>Weight:</strong> @Model.Weight kg<br /></span>
+                }
+                <strong>Price:</strong> <span class="text-success fw-bold">R @Model.Price?.ToString("N2")</span>
+            </p>
+
+            <div class="mb-2">
+                @if (Model.Vaccinated == "Y")
+                {
+                    <span class="badge bg-success me-1"><i class="bi bi-shield-check"></i> Vaccinated</span>
+                }
+                @if (!string.IsNullOrEmpty(Model.MicrochipNumber))
+                {
+                    <span class="badge bg-info"><i class="bi bi-cpu"></i> Microchipped</span>
+                }
+            </div>
+
+            @if (Model.Status == "Available" || string.IsNullOrEmpty(Model.Status))
+            {
+                <span class="badge bg-success mb-2 w-100 py-2">
+                    <i class="bi bi-check-circle"></i> Available
+                </span>
+            }
+            else if (Model.Status == "Sold")
+            {
+                <span class="badge bg-secondary mb-2 w-100 py-2">
+                    <i class="bi bi-bag-check"></i> Sold
+                    @if (Model.SoldDate.HasValue)
+                    {
+                        <small>(@Model.SoldDate.Value.ToString("MM/dd/yyyy"))</small>
+                    }
+                </span>
+            }
+
+            <div class="d-grid gap-2">
+                <a asp-controller="Puppy" asp-action="Details" asp-route-id="@Model.PuppyId"
+                   class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-eye"></i> View Details
+                </a>
+
+                @if (Model.Status == "Available" || string.IsNullOrEmpty(Model.Status))
+                {
+                    <div class="btn-group" role="group">
+                        <form asp-controller="Puppy" asp-action="MarkAsSold" asp-route-id="@Model.PuppyId"
+                              method="post" class="flex-fill"
+                              onsubmit="return confirm('Mark @Model.PuppyName as sold?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success btn-sm w-100">
+                                <i class="bi bi-bag-check"></i> Mark Sold
+                            </button>
+                        </form>
+
+                        <form asp-controller="Puppy" asp-action="Delete" asp-route-id="@Model.PuppyId"
+                              method="post" class="flex-fill"
+                              onsubmit="return confirm('Remove @Model.PuppyName?');">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger btn-sm w-100">
+                                <i class="bi bi-trash"></i> Remove
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

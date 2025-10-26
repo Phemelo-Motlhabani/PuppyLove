@@ -11,7 +11,7 @@
         public string? TrainerID { get; set; }
         public string? Username { get; set; }
         public string? ImageUrl { get; set; }
-        public IFormFile? ImageFile { get; set; }
+        public IFormFile ImageFile { get; set; }
         // public string Password { get; set; }
         public List<TrainerSkillDisplayViewModel> SelectedSkills { get; set; } = new();
         public List<Trainingrequest> TrainingRequests { get; set; } = new List<Trainingrequest>();

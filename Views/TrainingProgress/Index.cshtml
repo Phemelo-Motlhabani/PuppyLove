@@ -1,0 +1,84 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<PupV1.Models.TrainingProgress>
+@{
+    ViewData["Title"] = "Training Progress";
+}
+<div class="container mt-4">
+    <h2 class="mb-4"><i class="bi bi-clipboard-check"></i> Training Progress</h2>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> No active training progress records found.
+        </div>
+    }
+    else
+    {
+        <table class="table table-bordered table-striped shadow-sm">
+            <thead class="table-primary">
+                <tr>
+                    <th>Dog</th>
+                    <th>Breed</th>
+                    <th>Owner</th>
+                    <th>Program</th>
+                    <th>Progress Notes</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.DogName</td>
+                        <td>@item.DogBreed</td>
+                        <td>@item.OwnerName</td>
+                        <td>@item.Program</td>
+                        <td style="width: 25%;">
+                            <form asp-action="Edit" method="post" class="d-flex flex-column">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="id" value="@item.ProgressId" />
+                                <textarea name="ProgressNotes" class="form-control mb-2" rows="2">@item.ProgressNotes</textarea>
+                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pencil"></i> Update Notes
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            @if (item.IsFinished)
+                            {
+                                <span class="badge bg-success">Finished</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">In Progress</span>
+                            }
+                        </td>
+                        <td>
+                            @if (!item.IsFinished)
+                            {
+                                <form asp-action="Finish" asp-route-id="@item.ProgressId" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success btn-sm">
+                                        <i class="bi bi-flag"></i> Finish
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Complete</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

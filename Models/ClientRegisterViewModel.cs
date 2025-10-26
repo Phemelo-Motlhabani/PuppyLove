@@ -12,6 +12,8 @@ namespace PupV1.Models
         public string? City { get; set; }
         public string? Suburb { get; set; }
         public int? PostCode { get; set; }
+
+        public IFormFile? ImageFile { get; set; }
         [Required]
         [EmailAddress]
         public string? Email { get; set; }

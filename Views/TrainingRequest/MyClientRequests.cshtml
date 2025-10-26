@@ -1,0 +1,142 @@
+﻿@model IEnumerable<PupV1.Models.Trainingrequest>
+
+@{
+    ViewData["Title"] = "My Training Requests";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>My Training Requests</h2>
+        <a asp-action="Create" class="btn btn-primary">New Request</a>
+    </div>
+    <hr />
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <p>You haven't submitted any training requests yet.</p>
+            <a asp-action="Create" class="btn btn-primary">Submit Your First Request</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Dog Name</th>
+                        <th>Trainer</th>
+                        <th>Training Goals</th>
+                        <th>Request Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in Model)
+                    {
+                        var statusBadge = request.RequestStatus switch
+                        {
+                            "Pending" => "bg-warning text-dark",
+                            "Accepted" => "bg-success",
+                            "Rejected" => "bg-danger",
+                            _ => "bg-secondary"
+                        };
+
+                        <tr>
+                            <td>
+                                <strong>@request.DogName</strong><br />
+                                <small class="text-muted">@request.DogBreed, @request.DogAge yrs</small>
+                            </td>
+                            <td>@request.Trainer.Fname @request.Trainer.Lname</td>
+                            
+                            <td>@request.RequestDate.ToString("MMM dd, yyyy")</td>
+                            <td>
+                                <span class="badge @statusBadge">@request.RequestStatus</span>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                        data-bs-target="#detailsModal@(request.TrequestId)">
+                                    View Details
+                                </button>
+
+                                @if (request.RequestStatus == "Pending")
+                                {
+                                    <form asp-action="Cancel" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@request.TrequestId" />
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Are you sure you want to cancel this request?')">
+                                            Cancel
+                                        </button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+
+                        
+                        <div class="modal fade" id="detailsModal@(request.TrequestId)" tabindex="-1">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Request Details - @request.DogName</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <p><strong>Dog Name:</strong> @request.DogName</p>
+                                                <p><strong>Breed:</strong> @request.DogBreed</p>
+                                                <p><strong>Age:</strong> @request.DogAge years</p>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><strong>Trainer:</strong> @request.Trainer.Fname @request.Trainer.Lname</p>
+                                                <p><strong>Request Date:</strong> @request.RequestDate.ToString("MMMM dd, yyyy")</p>
+                                                <p><strong>Status:</strong> <span class="badge @statusBadge">@request.RequestStatus</span></p>
+                                            </div>
+                                        </div>
+                                        
+
+                                        <hr />
+
+                                      
+
+                                        @if (!string.IsNullOrEmpty(request.AdditionalNotes))
+                                        {
+                                            <p><strong>Additional Notes:</strong></p>
+                                            <p>@request.AdditionalNotes</p>
+                                        }
+
+                                 
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+}

@@ -43,6 +43,9 @@ public partial class Puppy
     [StringLength(20)]
     public string? Size { get; set; }
 
+    [StringLength(100)]
+    public string? Description { get; set; }
+
     public decimal? Price { get; set; }
     public string ? Status { get; set; }
 

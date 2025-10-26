@@ -1,211 +1,332 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@model PupV1.Models.BreederDashboardViewModel
+﻿@model PupV1.Models.BreederDashboardViewModel
 @{
     ViewData["Title"] = "My Dashboard";
 }
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-<h2>Welcome, @Model.Name!</h2>
 
-<div id="dashdiv" class="p-3 mt-3 rounded shadow-sm bg-light border border-primary" style="width: fit-content">
-    <div>
-        <img src="@Model.ImageUrl" alt="Profile Picture" class="img-fluid rounded" style="height:200px; object-fit:cover;" />
-        <p><strong>Name:</strong> @Model.Name</p>
-        <p><strong>Surname:</strong> @Model.Surname</p>
-        <p><strong>Suburb:</strong> @Model.Suburb</p>
-        <p><strong>City:</strong> @Model.City</p>
-        <p><strong>Phone Number:</strong> @Model.CellNUm</p>
-        <p><strong>Kennel Name:</strong> @Model.KennelName</p>
-        
-    </div>
-    <button class="btn btn-primary" onclick="toggleProfile()">View</button>
-
-    <div id="profileDiv" style="display:none; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 20px;background-color:#f0f8ff;">
-        <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label>Name</label>
-                <input asp-for="Name" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Surname</label>
-                <input asp-for="Surname" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Suburb</label>
-                <input asp-for="Suburb" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>City</label>
-                <input asp-for="City" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input asp-for="CellNUm" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Kennel Name</label>
-                <input asp-for="KennelName" class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="ImageFile">Upload Image</label>
-                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Username" />
-            <button type="submit" class="btn btn-success mt-2">Update Profile</button>
-            <button type="button" class="btn btn-secondary mt-2" onclick="toggleProfile()">Cancel</button>
-        </form>
-    </div>
-
-    <!-- Dashboard cards outside the form -->
-    <div class="row mt-4">
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100 shadow-sm border-success">
-                <div class="card-body text-center">
-                    <div class="display-1 text-success mb-3">
-                        <i class="bi bi-collection"></i>
-                    </div>
-                    <h5 class="card-title">My Litters</h5>
-                    <p class="card-text">Manage your litters and track puppies</p>
-                    <a href="@Url.Action("Index", "Litter")" class="btn btn-success w-100">
-                        <i class="bi bi-eye"></i> View Litters
-                    </a>
-                    <a href="@Url.Action("Create", "Litter")" class="btn btn-outline-success w-100 mt-2">
-                        <i class="bi bi-plus-circle"></i> Add New Litter
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4 mb-4">
-            <div class="card h-100 shadow-sm border-info">
-                <div class="card-body text-center">
-                    <div class="display-1 text-info mb-3">
-                        <i class="bi bi-heart-fill"></i>
-                    </div>
-                    <h5 class="card-title">Puppies</h5>
-                    <p class="card-text">Register and manage your puppies</p>
-                    <a href="@Url.Action("Index", "Puppy")" class="btn btn-info w-100">
-                        <i class="bi bi-grid"></i> View All Puppies
-                    </a>
-                    <a href="@Url.Action("Create", "Puppy")" class="btn btn-outline-info w-100 mt-2">
-                        <i class="bi bi-plus-circle"></i> Register New Puppy
-                    </a>
+<div class="container-fluid py-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="background-color: #667eea;">
+                <div class="card-body text-white py-4">
+                    <h1 class="display-5 mb-0 text-white">
+                        <i class="bi bi-person-circle"></i> Welcome, @Model.Name!
+                    </h1>
+                    <p class="lead mb-0 text-white opacity-75">Manage your training sessions and profile</p>
                 </div>
             </div>
         </div>
     </div>
 
-    @section Scripts {
-        <script>
-            function toggleProfile() {
-                var profileDiv = document.getElementById('profileDiv');
-                if (profileDiv.style.display === 'none') {
-                    profileDiv.style.display = 'block';
-                    profileDiv.scrollIntoView({ behavior: 'smooth' });
-                } else {
-                    profileDiv.style.display = 'none';
-                }
-            }
-        </script>
-        @{
-            await Html.RenderPartialAsync("_ValidationScriptsPartial");
-        }
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle-fill"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
     }
-    </div>
-    @*<div id="profileDiv" style="display:none; margin-top: 20px; border-left: 4px solid #007bff; padding-left: 20px;background-color:#f0f8ff;">
-        <form asp-action="UpdateProfile" method="post">
-            <div class="form-group">
-                <label>Name</label>
-                <input asp-for="Name" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Surname</label>
-                <input asp-for="Surname" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Suburb</label>
-                <input asp-for="Suburb" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>City</label>
-                <input asp-for="City" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input asp-for="CellNUm" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label>Kennel Name</label>
-                <input asp-for="KennelName" class="form-control" />
-            </div>
-            <div class="form-group mb-3">
-                <label asp-for="ImageFile">Upload Image</label>
-                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="Username" />
-            <button type="submit" class="btn btn-success mt-2">Update Profile</button>
-            <button type="button" class="btn btn-secondary mt-2" onclick="toggleProfile()">Cancel</button>
-        </form>
-    </div>
-</div>
 
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0"><i class="bi bi-person-badge"></i> Your Profile</h5>
+                </div>
+                <div class="card-body text-center">
+                    <img src="@Model.ImageUrl" alt="Profile Picture"
+                         class="rounded-circle mb-3 border border-3 border-primary"
+                         style="width: 150px; height: 150px; object-fit: cover;" />
 
-<div class="col-md-6 col-lg-4 mb-4">
-    <div class="card h-100 shadow-sm border-success">
-        <div class="card-body text-center">
-            <div class="display-1 text-success mb-3">
-                <i class="bi bi-collection"></i>
+                    <div id="infoDiv">
+                        <h4 class="mb-1">@Model.Name @Model.Surname</h4>
+                        <p class="text-primary mb-2">
+                            <i class="bi bi-house-fill"></i> <strong>@Model.KennelName</strong>
+                        </p>
+                        <p class="text-muted mb-3">
+                            <i class="bi bi-geo-alt"></i> @Model.Suburb, @Model.City
+                        </p>
+                        <p class="mb-0">
+                            <i class="bi bi-telephone"></i> @Model.CellNUm
+                        </p>
+
+                        <button class="btn btn-outline-primary mt-3 w-100" type="button" onclick="toggleProfile()">
+                            <i class="bi bi-pencil"></i> Edit Profile
+                        </button>
+                    </div>
+
+                   
+                    <div id="profileDiv" style="display:none;" class="mt-3 text-start">
+                        <hr />
+                        <form asp-action="UpdateProfile" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label class="form-label">Name</label>
+                                <input asp-for="Name" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Surname</label>
+                                <input asp-for="Surname" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Kennel Name</label>
+                                <input asp-for="KennelName" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Suburb</label>
+                                <input asp-for="Suburb" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">City</label>
+                                <input asp-for="City" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input asp-for="CellNUm" class="form-control" />
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="ImageFile" class="form-label">Upload New Image</label>
+                                <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                            </div>
+                            <input type="hidden" asp-for="Username" />
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-save"></i> Save Changes
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="toggleProfile()">
+                                    <i class="bi bi-x"></i> Cancel
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <h5 class="card-title">My Litters</h5>
-            <p class="card-text">Manage your litters and track puppies</p>
-            <a asp-controller="Litter" asp-action="Index" class="btn btn-success w-100">
-                <i class="bi bi-eye"></i> View Litters
-            </a>
-            <a href="@Url.Action("Create", "Litter")" class="btn btn-outline-success w-100 mt-2" onclick="event.stopPropagation();">
-                <i class="bi bi-plus-circle"></i> Add New Litter
-            </a>
+
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0"><i class="bi bi-graph-up text-success"></i> Quick Stats</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <div>
+                            <p class="text-muted mb-0 small">ACTIVE LITTERS</p>
+                            <h3 class="mb-0 text-success">@(ViewBag.ActiveLitters ?? 0)</h3>
+                        </div>
+                        <div class="bg-success bg-opacity-10 rounded p-3">
+                            <i class="bi bi-collection-fill text-success fs-3"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                        <div>
+                            <p class="text-muted mb-0 small">AVAILABLE PUPPIES</p>
+                            <h3 class="mb-0 text-info">@(ViewBag.AvailablePuppies ?? 0)</h3>
+                        </div>
+                        <div class="bg-info bg-opacity-10 rounded p-3">
+                            <i class="bi bi-heart-fill text-info fs-3"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-muted mb-0 small">PENDING REQUESTS</p>
+                            <h3 class="mb-0 text-warning">@(ViewBag.PendingRequests ?? 0)</h3>
+                        </div>
+                        <div class="bg-warning bg-opacity-10 rounded p-3">
+                            <i class="bi bi-envelope-fill text-warning fs-3"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0"><i class="bi bi-grid-fill text-primary"></i> Kennel Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                       
+                        <div class="col-md-6">
+                            <div class="card h-100 border-success shadow-sm hover-lift">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div class="display-4 text-success">
+                                            <i class="bi bi-collection-fill"></i>
+                                        </div>
+                                        <span class="badge bg-success rounded-pill">Manage</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">My Litters</h5>
+                                    <p class="card-text text-muted mb-3">Manage your litters and track breeding records</p>
+                                    <div class="d-grid gap-2">
+                                        <a href="@Url.Action("Index", "Litter")" class="btn btn-success">
+                                            <i class="bi bi-eye"></i> View All Litters
+                                        </a>
+                                        <a href="@Url.Action("Create", "Litter")" class="btn btn-outline-success">
+                                            <i class="bi bi-plus-circle"></i> Add New Litter
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="col-md-6">
+                            <div class="card h-100 border-info shadow-sm hover-lift">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div class="display-4 text-info">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </div>
+                                        <span class="badge bg-info rounded-pill">Puppies</span>
+                                    </div>
+                                    <h5 class="card-title fw-bold">Puppies</h5>
+                                    <p class="card-text text-muted mb-3">Register and manage all your puppies</p>
+                                    <div class="d-grid gap-2">
+                                        <a href="@Url.Action("Index", "Puppy")" class="btn btn-info">
+                                            <i class="bi bi-grid"></i> View All Puppies
+                                        </a>
+                                        <a href="@Url.Action("Register", "Puppy")" class="btn btn-outline-info">
+                                            <i class="bi bi-plus-circle"></i> Register New Puppy
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                       
+                        <div class="col-md-12">
+                            <div class="card border-warning shadow-sm hover-lift">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-2 text-center">
+                                            <div class="display-3 text-warning">
+                                                <i class="bi bi-envelope-fill"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <h5 class="card-title fw-bold mb-1">Puppy Requests</h5>
+                                            <p class="card-text text-muted mb-0">View and respond to client adoption requests</p>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a asp-controller="PuppyRequest" asp-action="IncomingRequests"
+                                               class="btn btn-warning w-100">
+                                                <i class="bi bi-inbox"></i> View Requests
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-3">
+                    <h5 class="mb-0"><i class="bi bi-lightbulb-fill text-warning"></i> Breeder Best Practices</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-clipboard-check text-success fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Health Records</h6>
+                                    <p class="text-muted small mb-0">Keep detailed health and vaccination records for all puppies</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-camera-fill text-info fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Quality Photos</h6>
+                                    <p class="text-muted small mb-0">Upload clear, well-lit photos of puppies and parents</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-warning bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-chat-dots-fill text-warning fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Quick Responses</h6>
+                                    <p class="text-muted small mb-0">Respond to client requests within 24-48 hours</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 rounded p-2">
+                                        <i class="bi bi-shield-check text-primary fs-4"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <h6 class="mb-1">Transparency</h6>
+                                    <p class="text-muted small mb-0">Be honest about health issues and breeding practices</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
-<div class="col-md-6 col-lg-4 mb-4">
-    <div class="card h-100 shadow-sm border-info">
-        <div class="card-body text-center">
-            <div class="display-1 text-info mb-3">
-                <i class="bi bi-heart-fill"></i>
-            </div>
-            <h5 class="card-title">Puppies</h5>
-            <p class="card-text">Register and manage your puppies</p>
-            <a asp-controller="Litter" asp-action="Index" class="btn btn-info w-100">
-                <i class="bi bi-grid"></i> View All Puppies
-            </a>
-        </div>
-    </div>
-</div>
-
 
 @section Scripts {
     <script>
-        function toggleProfile() {
+        function toggleProfile() 
+        {
             var profileDiv = document.getElementById('profileDiv');
-            if (profileDiv.style.display === 'none') {
+            var infoDiv = document.getElementById('infoDiv');
+            var isHidden = profileDiv.style.display === 'none' || profileDiv.style.display === '';
+
+            if (isHidden) 
+            {
                 profileDiv.style.display = 'block';
-                profileDiv.scrollIntoView({behaviour: 'smooth'})
-            } else {
+                infoDiv.style.display = 'none';
+                setTimeout(function () 
+                {
+                    profileDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            } 
+            else 
+            {
                 profileDiv.style.display = 'none';
+                infoDiv.style.display = 'block';
             }
         }
     </script>
+
+    <style>
+        .hover-lift {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+            .hover-lift:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+            }
+    </style>
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-}*@
+}
+
+    

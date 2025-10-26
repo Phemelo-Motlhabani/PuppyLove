@@ -35,15 +35,37 @@ namespace PupV1.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterAsTrainer(TrainerRegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(model);
             {
-                //var existing = await _context.Trainers.FirstOrDefaultAsync(c => c.Username == model.username);
                 var existing = await _userManager.FindByNameAsync(model.username);
                 if (existing != null)
                 {
                     ModelState.AddModelError("", "Username has been taken");
                     return View(model);
+                }
+
+                string? imageUrl = null;
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "profiles");
+
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    imageUrl = "/images/profiles/" + uniqueFileName;
+                }
+                else
+                {
+                    imageUrl = "/images/default-profile.jpg";
                 }
 
                 var identityUser = new ApplicationUser
@@ -55,11 +77,17 @@ namespace PupV1.Controllers
                     City = model.city,
                     CellNUm = model.CellNum,
                     Email = model.Email,
-                    //TrainerId = model.TrainerId,
+                    
                 };
                 var result = await _userManager.CreateAsync(identityUser, model.Password);
                 if (!result.Succeeded)
                 {
+                    if (imageUrl != null && imageUrl != "/images/default-profile.jpg")
+                    {
+                        string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imageUrl.TrimStart('/'));
+                        if (System.IO.File.Exists(filePath))
+                            System.IO.File.Delete(filePath);
+                    }
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -67,7 +95,7 @@ namespace PupV1.Controllers
                     return View(model);
                 }
 
-                //Identity user
+               
                 var trainer = new Trainer
                 {
                     Username = model.username,
@@ -77,6 +105,7 @@ namespace PupV1.Controllers
                     Suburb = model.suburb ?? "",
                     City = model.city ?? "",
                     CellNum = model.CellNum ?? "",
+                    ImageUrl = imageUrl
                     //TrainerId = trainer.TrainerId
 
 
@@ -107,16 +136,40 @@ namespace PupV1.Controllers
         [HttpPost]
         public async Task<IActionResult> RegisterAsClient(ClientRegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return View(model);
             {
-                //var existing = await _context.Clients.FirstOrDefaultAsync(c => c.Username == model.Username);
+                
                 var existing = await _userManager.FindByNameAsync(model.Username);
                 if (existing != null)
                 {
                     ModelState.AddModelError("", "Username has been taken");
                     return View(model);
                 }
+
+                string? imageUrl = null;
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
+                {
+                    string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "profiles");
+
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+                    string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.ImageFile.CopyToAsync(fileStream);
+                    }
+
+                    imageUrl = "/images/profiles/" + uniqueFileName;
+                }
+                else
+                {
+                    imageUrl = "/images/default-profile.jpg";
+                }
+
                 var identityUser = new ApplicationUser
                 {
                     UserName = model.Username,
@@ -132,6 +185,12 @@ namespace PupV1.Controllers
                 var result = await _userManager.CreateAsync(identityUser, model.Password);
                 if (!result.Succeeded)
                 {
+                    if (imageUrl != null && imageUrl != "/images/default-profile.jpg")
+                    {
+                        string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imageUrl.TrimStart('/'));
+                        if (System.IO.File.Exists(filePath))
+                            System.IO.File.Delete(filePath);
+                    }
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError(string.Empty, error.Description);
@@ -149,12 +208,13 @@ namespace PupV1.Controllers
                     City = model.City,
                     CellNum = model.CellNum,
                     Email = model.Email,
-                    PostCode = model.PostCode
+                    PostCode = model.PostCode,
+                    ImageUrl = imageUrl
 
                 };
                 _context.Clients.Add(client);
                 await _context.SaveChangesAsync();
-                //Identity user
+               
                 identityUser.ClientId = client.ClientId;
                 await _userManager.UpdateAsync(identityUser);
 
@@ -188,7 +248,7 @@ namespace PupV1.Controllers
             {
 
 
-                // var existing = await _context.Breeders.FirstOrDefaultAsync(c => c.Username == model.Username);
+               
                 var existing = await _userManager.FindByNameAsync(model.Username);
                 if (existing != null)
                 {
@@ -271,12 +331,12 @@ namespace PupV1.Controllers
                 _context.Breeders.Add(breeder);
                 await _context.SaveChangesAsync();
                 Console.WriteLine($"Breeder Record Created! BreederId: {breeder.BreederId}");
-                //Identity user
+                
                 identityUser.BreederId = breeder.BreederId;
                 await _userManager.UpdateAsync(identityUser);
                 Console.WriteLine("Identity User Linked to Breeder!");
 
-                // Check if Breeder role exists
+               
                 if (!await _context.Roles.AnyAsync(r => r.Name == "Breeder"))
                 {
                     Console.WriteLine("ERROR: Breeder role does not exist in database!");

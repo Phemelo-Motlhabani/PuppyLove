@@ -35,7 +35,7 @@
                 <div class="col-md-6 col-lg-4 mb-4">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body">
-                            <h5 class="card-title">@litter.BreedType</h5>
+                            <h5 class="card-title">@litter?.BreedType?.BreedName</h5>
                             <p class="text-muted">Born: @(litter.BirthDate.HasValue ? litter.BirthDate.Value.ToString("MMMM dd, yyyy") : "N/A") </p>
 
                             <div class="mb-3">
@@ -61,3 +61,4 @@
         </div>
     }
 </div>
+<a asp-controller="BreederDashboard" asp-action="Index" class="btn btn-secondary mt-3">Back</a>

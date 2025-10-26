@@ -405,6 +405,9 @@ namespace PupV1.Migrations
                         .HasColumnType("varchar(20)")
                         .HasColumnName("FName");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Lname")
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)")
@@ -517,8 +520,8 @@ namespace PupV1.Migrations
                         .HasColumnName("ClientID");
 
                     b.Property<string>("Colour")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime(6)");
@@ -526,9 +529,13 @@ namespace PupV1.Migrations
                     b.Property<DateTime?>("DateOfBirth")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
                     b.Property<string>("Gender")
-                        .HasMaxLength(1)
-                        .HasColumnType("varchar(1)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("HealthStatus")
                         .HasMaxLength(50)
@@ -553,12 +560,12 @@ namespace PupV1.Migrations
                         .HasColumnType("varchar(25)");
 
                     b.Property<string>("SaleStatus")
-                        .HasMaxLength(1)
-                        .HasColumnType("varchar(1)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Size")
-                        .HasMaxLength(2)
-                        .HasColumnType("varchar(2)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateTime?>("SoldDate")
                         .HasColumnType("datetime(6)");
@@ -567,12 +574,12 @@ namespace PupV1.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("TrainingStatus")
-                        .HasMaxLength(1)
-                        .HasColumnType("varchar(1)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Vaccinated")
-                        .HasMaxLength(1)
-                        .HasColumnType("varchar(1)");
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
 
                     b.Property<DateTime?>("VaccinationDate")
                         .HasColumnType("datetime(6)");
@@ -640,6 +647,9 @@ namespace PupV1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("BreederID");
 
+                    b.Property<string>("BreederResponse")
+                        .HasColumnType("text");
+
                     b.Property<int?>("ClientId")
                         .HasColumnType("int")
                         .HasColumnName("ClientID");
@@ -647,9 +657,18 @@ namespace PupV1.Migrations
                     b.Property<DateTime?>("ExpDate")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
+
                     b.Property<int>("PuppyId")
                         .HasColumnType("int")
                         .HasColumnName("PuppyID");
+
+                    b.Property<DateTime>("RequestDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("ResponseDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("Status")
                         .HasMaxLength(20)
@@ -681,14 +700,17 @@ namespace PupV1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ClientID");
 
-                    b.Property<double?>("Rating")
+                    b.Property<double>("Rating")
                         .HasColumnType("double");
+
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("ReviewText")
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
 
-                    b.Property<int>("TrainerId")
+                    b.Property<int?>("TrainerId")
                         .HasColumnType("int")
                         .HasColumnName("TrainerID");
 
@@ -854,6 +876,9 @@ namespace PupV1.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<string>("DogBreed")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -881,9 +906,16 @@ namespace PupV1.Migrations
                     b.Property<int>("TrainerId")
                         .HasColumnType("int");
 
+                    b.Property<int>("TrequestId")
+                        .HasColumnType("int");
+
                     b.HasKey("ProgressId");
 
+                    b.HasIndex("ClientId");
+
                     b.HasIndex("TrainerId");
+
+                    b.HasIndex("TrequestId");
 
                     b.ToTable("TrainingProgresses");
                 });
@@ -895,9 +927,30 @@ namespace PupV1.Migrations
                         .HasColumnType("int")
                         .HasColumnName("TRequestID");
 
+                    b.Property<string>("AdditionalInfo")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
+                    b.Property<string>("AdditionalNotes")
+                        .HasMaxLength(1000)
+                        .HasColumnType("varchar(1000)");
+
                     b.Property<int>("ClientId")
                         .HasColumnType("int")
                         .HasColumnName("ClientID");
+
+                    b.Property<int>("DogAge")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DogBreed")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<string>("DogName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("tinyint(1)");
@@ -915,8 +968,8 @@ namespace PupV1.Migrations
                         .HasColumnName("TrainerID");
 
                     b.Property<string>("TrainingProgram")
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("TrequestId");
 
@@ -1123,9 +1176,7 @@ namespace PupV1.Migrations
 
                     b.HasOne("PupV1.Models.Trainer", "Trainer")
                         .WithMany("Reviews")
-                        .HasForeignKey("TrainerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TrainerId");
 
                     b.Navigation("Breeder");
 
@@ -1161,13 +1212,27 @@ namespace PupV1.Migrations
 
             modelBuilder.Entity("PupV1.Models.TrainingProgress", b =>
                 {
+                    b.HasOne("PupV1.Models.Client", null)
+                        .WithMany("TrainingProgresses")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("PupV1.Models.Trainer", "Trainer")
                         .WithMany("TrainingProgresses")
                         .HasForeignKey("TrainerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PupV1.Models.Trainingrequest", "Trainingrequest")
+                        .WithMany("TrainingProgresses")
+                        .HasForeignKey("TrequestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Trainer");
+
+                    b.Navigation("Trainingrequest");
                 });
 
             modelBuilder.Entity("PupV1.Models.Trainingrequest", b =>
@@ -1217,6 +1282,8 @@ namespace PupV1.Migrations
 
                     b.Navigation("Reviews");
 
+                    b.Navigation("TrainingProgresses");
+
                     b.Navigation("Trainingrequests");
                 });
 
@@ -1246,6 +1313,11 @@ namespace PupV1.Migrations
                     b.Navigation("TrainingProgresses");
 
                     b.Navigation("Trainingrequests");
+                });
+
+            modelBuilder.Entity("PupV1.Models.Trainingrequest", b =>
+                {
+                    b.Navigation("TrainingProgresses");
                 });
 #pragma warning restore 612, 618
         }

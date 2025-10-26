@@ -30,6 +30,16 @@ public partial class Puppyrequest
     [Column("PuppyID")]
     public int PuppyId { get; set; }
 
+    [Column(TypeName = "text")]
+    public string? BreederResponse { get; set; }
+
+    [Column(TypeName = "text")]
+    public string? Message { get; set; }
+
+    public DateTime RequestDate { get; set; }
+
+    public DateTime? ResponseDate { get; set; }
+
     [ForeignKey("BreederId")]
     [InverseProperty("Puppyrequests")]
     public virtual Breeder? Breeder { get; set; }

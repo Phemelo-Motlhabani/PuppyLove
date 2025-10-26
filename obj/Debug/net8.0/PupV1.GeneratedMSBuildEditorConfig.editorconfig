@@ -90,10 +90,6 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Dashboard/TrainingRequests.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFzaGJvYXJkXFRyYWluaW5nUmVxdWVzdHMuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -118,12 +114,64 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGFya1JlY29tbWVuZGF0aW9uXENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/PuppyRequest/BrowsePuppies.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlSZXF1ZXN0XEJyb3dzZVB1cHBpZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/PuppyRequest/IncomingRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlSZXF1ZXN0XEluY29taW5nUmVxdWVzdHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/PuppyRequest/MyRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlSZXF1ZXN0XE15UmVxdWVzdHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/PuppyRequest/RequestDetails.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlSZXF1ZXN0XFJlcXVlc3REZXRhaWxzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/PuppyRequest/RequestPuppy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlSZXF1ZXN0XFJlcXVlc3RQdXBweS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/PuppyRequest/_RequestsList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlSZXF1ZXN0XF9SZXF1ZXN0c0xpc3QuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Puppy/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlcRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Puppy/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Puppy/Register.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUHVwcHlcUmVnaXN0ZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Review/BrowseBreeders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2aWV3XEJyb3dzZUJyZWVkZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Review/BrowseTrainers.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2aWV3XEJyb3dzZVRyYWluZXJzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Review/CreateReview.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmV2aWV3XENyZWF0ZVJldmlldy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Shared/_PuppyCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9QdXBweUNhcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Shared/_TopRatedSliders.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Ub3BSYXRlZFNsaWRlcnMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Shared/_ValidationScriptsPartial.cshtml]
@@ -132,6 +180,30 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/Skills/SkillSelection.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2tpbGxzXFNraWxsU2VsZWN0aW9uLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/TrainingProgress/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaW5pbmdQcm9ncmVzc1xJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/TrainingRequest/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaW5pbmdSZXF1ZXN0XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/TrainingRequest/MyClientRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaW5pbmdSZXF1ZXN0XE15Q2xpZW50UmVxdWVzdHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/TrainingRequest/MyRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaW5pbmdSZXF1ZXN0XE15UmVxdWVzdHMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/TrainingRequest/SendRequest.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaW5pbmdSZXF1ZXN0XFNlbmRSZXF1ZXN0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/TrainingRequest/TrainingRequests.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVHJhaW5pbmdSZXF1ZXN0XFRyYWluaW5nUmVxdWVzdHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Marais/Documents/Buntu/PuppyLove/GitVersion/Views/_ViewImports.cshtml]

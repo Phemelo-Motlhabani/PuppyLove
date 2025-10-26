@@ -22,6 +22,41 @@ namespace PupV1.Controllers
             _userManager = userManager;
             _webHostEnvironment = webHostEnvironment;
         }
+        public async Task<IActionResult> Index()
+        {
+            Console.WriteLine("==================== GET Puppy Index ====================");
+
+            var user = await _userManager.GetUserAsync(User);
+            Console.WriteLine($"User found: {user != null}");
+
+            if (user?.BreederId == null)
+            {
+                Console.WriteLine("User or BreederId is null - redirecting to login");
+                return RedirectToAction("Login", "Account");
+            }
+
+            Console.WriteLine($"Loading puppies for BreederId: {user.BreederId}");
+
+            try
+            {
+                var puppies = await _context.Puppies
+                    .Include(p => p.Litter)
+                        .ThenInclude(l => l.BreedType)
+                    .Where(p => p.Litter != null && p.Litter.BreederId == user.BreederId)
+                    .OrderByDescending(p => p.CreatedDate)
+                    .ToListAsync();
+
+                Console.WriteLine($"Found {puppies.Count} puppies");
+
+                return View(puppies);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in Puppy Index: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> Register(int? litterId)
@@ -123,23 +158,27 @@ namespace PupV1.Controllers
                 }
 
             }
-            int ageInWeeks = (int)((DateTime.Now - model.DateOfBirth).TotalDays / 7);
+            int ageInWeeks = 0;
+            if(litter.BirthDate.HasValue && litter.BirthDate.Value > DateTime.MinValue)
+            {
+                ageInWeeks = (int)((DateTime.Now - litter.BirthDate.Value).TotalDays / 7);
+            }
 
             var puppy = new Puppy
             {
                 LitterId = model.LitterId,
                 PuppyName = model.PuppyName,
                 Gender = model.Gender,
-                DateOfBirth = model.DateOfBirth,
+                DateOfBirth = litter.BirthDate,  
                 Age = ageInWeeks,
-                Weight = model.Weight,
+                Weight = model.Weight.HasValue ? Math.Round(model.Weight.Value, 2) : null,  
                 Colour = model.Colour,
                 Size = model.Size,
                 Price = model.Price,
                 HealthStatus = model.HealthStatus,
                 Vaccinated = model.IsVaccinated ? "Y" : "N",
                 VaccinationDate = model.VaccinationDate,
-                MicrochipNumber = model.IsMicrochipped ?model.MicrochipNumber : null,
+                MicrochipNumber = model.IsMicrochipped ? model.MicrochipNumber : null,
                 Status = "Available",
                 ImageUrl = imageUrl ?? "/images/default-puppy.jpg",
                 CreatedDate = DateTime.Now
@@ -272,9 +311,6 @@ namespace PupV1.Controllers
                 }).ToList();
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        
     }
 }

@@ -1,0 +1,114 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<PupV1.Models.Puppyrequest>
+@{
+    ViewData["Title"] = "My Puppy Requests";
+}
+<div class="container mt-4">
+    <h2><i class="bi bi-inbox"></i> My Puppy Requests</h2>
+    <p class="lead text-muted">Track the status of your puppy requests</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            <h4><i class="bi bi-info-circle"></i> No Requests Yet</h4>
+            <p>You haven't made any puppy requests yet.</p>
+            <a asp-action="BrowsePuppies" class="btn btn-primary">
+                <i class="bi bi-search"></i> Browse Available Puppies
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var request in Model)
+            {
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title">@request.Puppy?.PuppyName</h5>
+                                @if (request.Status == "Pending")
+                                {
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-clock"></i> Pending
+                                    </span>
+                                }
+                                else if (request.Status == "Accepted")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Accepted
+                                    </span>
+                                }
+                                else if (request.Status == "Rejected")
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="bi bi-x-circle"></i> Rejected
+                                    </span>
+                                }
+                            </div>
+
+                            <div class="row">
+                                <div class="col-4">
+                                    <img src="@request.Puppy?.ImageUrl" class="img-fluid rounded" alt="@request.Puppy?.PuppyName" />
+                                </div>
+                                <div class="col-8">
+                                    <p class="mb-1"><strong>Breed:</strong> @request.Puppy?.Litter?.BreedType?.BreedName</p>
+                                    <p class="mb-1"><strong>Breeder:</strong> @request.Breeder?.Fname @request.Breeder?.Lname</p>
+                                    <p class="mb-1"><strong>Price:</strong> R @request.Puppy?.Price?.ToString("N2")</p>
+                                    <p class="mb-1"><strong>Requested:</strong> @request.RequestDate.ToString("MMM dd, yyyy")</p>
+                                </div>
+                            </div>
+
+                            <hr />
+
+                            <div class="mb-2">
+                                <strong>Your Message:</strong>
+                                <p class="text-muted small">@request.Message</p>
+                            </div>
+
+                            @if (!string.IsNullOrEmpty(request.BreederResponse))
+                            {
+                                <div class="alert alert-light mb-2">
+                                    <strong>Breeder Response:</strong>
+                                    <p class="mb-0">@request.BreederResponse</p>
+                                    @if (request.ResponseDate.HasValue)
+                                    {
+                                        <small class="text-muted">Responded on @request.ResponseDate.Value.ToString("MMM dd, yyyy")</small>
+                                    }
+                                </div>
+                            }
+
+                            @if (request.Status == "Accepted")
+                            {
+                                <div class="alert alert-success">
+                                    <i class="bi bi-check-circle"></i> <strong>Congratulations!</strong> Your request has been accepted. The breeder will contact you to arrange pickup and payment.
+                                </div>
+                            }
+
+                            @if (request.Status == "Pending")
+                            {
+                                <form asp-action="CancelRequest" asp-route-id="@request.RequestId" method="post"
+                                      onsubmit="return confirm('Are you sure you want to cancel this request?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-x-circle"></i> Cancel Request
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

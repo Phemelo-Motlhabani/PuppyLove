@@ -1,0 +1,116 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.ReviewViewModel
+@{
+    ViewData["Title"] = $"Review {Model.ProviderName}";
+}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="bi bi-star-fill"></i> Write a Review</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info mb-4">
+                        <i class="bi bi-info-circle"></i>
+                        <strong>Reviewing:</strong> @Model.ProviderName (@Model.ProviderType)
+                    </div>
+
+                    <form asp-controller="Review" asp-action="CreateReview" method="post">
+                        @Html.AntiForgeryToken()
+
+                        
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                        
+                        @if (Model.ProviderType == "Trainer")
+                        {
+                            <input type="hidden" asp-for="TrainerId" />
+                        }
+                        else
+                        {
+                            <input type="hidden" asp-for="BreederId" />
+                        }
+                        <input type="hidden" asp-for="ProviderType" />
+                        <input type="hidden" asp-for="ProviderName" />
+
+                        
+                        <div class="form-group mb-4">
+                            <label asp-for="Rating" class="form-label fw-bold">Rating <span class="text-danger">*</span></label>
+                            <div class="rating-input">
+                                <div class="btn-group w-100" role="group">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        var starId = $"star{i}";
+                                        <input type="radio" asp-for="Rating" value="@i" class="btn-check" id="@starId" />
+                                        <label class="btn btn-outline-warning" for="@starId">
+                                            <i class="bi bi-star-fill"></i> @i
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+                            <span asp-validation-for="Rating" class="text-danger d-block mt-2"></span>
+                            <small class="form-text text-muted">Select a rating from 1 to 5 stars</small>
+                        </div>
+
+                        
+                        <div class="form-group mb-4">
+                            <label asp-for="ReviewText" class="form-label fw-bold">Your Review <span class="text-danger">*</span></label>
+                            <textarea asp-for="ReviewText" class="form-control" rows="6"
+                                      placeholder="Share your experience with this @Model.ProviderType.ToLower()... (minimum 10 characters)"></textarea>
+                            <span asp-validation-for="ReviewText" class="text-danger d-block mt-2"></span>
+                        </div>
+
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-send-fill"></i> Submit Review
+                            </button>
+                            @if (Model.ProviderType == "Trainer")
+                            {
+                                <a asp-action="BrowseTrainers" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> Back to Trainers
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="BrowseBreeders" class="btn btn-secondary">
+                                    <i class="bi bi-arrow-left"></i> Back to Breeders
+                                </a>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Debug: Log form submission - FIXED field names
+        document.querySelector('form').addEventListener('submit', function (e) {
+            console.log('=== FORM SUBMITTING ===');
+            console.log('TrainerId:', document.querySelector('input[name="TrainerId"]')?.value || 'null');
+            console.log('BreederId:', document.querySelector('input[name="BreederId"]')?.value || 'null');
+            console.log('ProviderType:', document.querySelector('input[name="ProviderType"]')?.value);
+            console.log('Rating:', document.querySelector('input[name="Rating"]:checked')?.value || 'NOT SELECTED');
+            console.log('ReviewText Length:', document.querySelector('textarea[name="ReviewText"]')?.value.length || 0);
+            console.log('ReviewText:', document.querySelector('textarea[name="ReviewText"]')?.value);
+        });
+
+        
+        document.querySelectorAll('.btn-check').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                console.log('Rating selected:', this.value);
+            });
+        });
+    </script>
+}
+

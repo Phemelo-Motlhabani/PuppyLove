@@ -1,0 +1,64 @@
+﻿@model PupV1.Models.Trainingrequest
+
+@{
+    ViewData["Title"] = "Submit Training Request";
+}
+
+<div class="container mt-4">
+    <h2>Submit Training Request</h2>
+    <hr />
+
+    <form asp-action="Create" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group mb-3">
+            <label asp-for="TrainerId" class="form-label">Select Trainer</label>
+            <select asp-for="TrainerId" class="form-control" asp-items="ViewBag.Trainers">
+                <option value="">-- Select a Trainer --</option>
+            </select>
+            <span asp-validation-for="TrainerId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-3">
+            <label asp-for="DogName" class="form-label">Dog's Name</label>
+            <input asp-for="DogName" class="form-control" placeholder="Enter your dog's name" />
+            <span asp-validation-for="DogName" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="DogBreed" class="form-label">Breed</label>
+                    <input asp-for="DogBreed" class="form-control" placeholder="e.g., Golden Retriever" />
+                    <span asp-validation-for="DogBreed" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label asp-for="DogAge" class="form-label">Age (years)</label>
+                    <input asp-for="DogAge" type="number" class="form-control" placeholder="0" />
+                    <span asp-validation-for="DogAge" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group mb-3">
+            <label asp-for="AdditionalNotes" class="form-label">Additional Notes (Optional)</label>
+            <textarea asp-for="AdditionalNotes" class="form-control" rows="3"
+                      placeholder="Any behavioral issues, medical conditions, or other information the trainer should know"></textarea>
+            <span asp-validation-for="AdditionalNotes" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit Request</button>
+            <a asp-action="MyClientRequests" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

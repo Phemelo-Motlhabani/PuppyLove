@@ -11,7 +11,7 @@
     <div class="col-md-6 offset-md-3">
         <form asp-action="RegisterAsBreeder"  asp-controller="Account" method="post">
             @Html.AntiForgeryToken()
-           @* <div asp-validation-summary="ModelOnly" class="text-danger"></div>*@
+           
             <div asp-validation-summary="All" class="text-danger"></div>
 
             <div class="form-group mb-3">
@@ -19,27 +19,38 @@
                 <input asp-for="Username" class="form-control" />
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="Password"></label>
-                <input asp-for="Password" class="form-control" type="password" />
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label">Password</label>
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control" id="password"
+                           placeholder="Enter password" />
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="bi bi-eye" id="passwordIcon"></i>
+                    </button>
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="PasswordConfirmation"></label>
-                <input asp-for="PasswordConfirmation" class="form-control" type="password" />
+            <div class="mb-3">
+                <label asp-for="PasswordConfirmation" class="form-label">Confirm Password</label>
+                <div class="input-group">
+                    <input asp-for="PasswordConfirmation" type="password" class="form-control" id="confirmPassword"
+                           placeholder="Confirm password" />
+                    <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                        <i class="bi bi-eye" id="confirmPasswordIcon"></i>
+                    </button>
+                </div>
                 <span asp-validation-for="PasswordConfirmation" class="text-danger"></span>
             </div>
-
+            
             <div class="form-group mb-3">
-                <label asp-for="Fname"></label>
+                <label asp-for="Fname">Name</label>
                 <input asp-for="Fname" class="form-control" />
                 <span asp-validation-for="Fname" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="Lname"></label>
+                <label asp-for="Lname">Surname</label>
                 <input asp-for="Lname" class="form-control" />
                 <span asp-validation-for="Lname" class="text-danger"></span>
             </div>
@@ -51,7 +62,7 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="CellNum"></label>
+                <label asp-for="CellNum">Phone Number</label>
                 <input asp-for="CellNum" class="form-control" />
                 <span asp-validation-for="CellNum" class="text-danger"></span>
             </div>
@@ -69,7 +80,7 @@
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="KennelName"></label>
+                <label asp-for="KennelName">Kennel Name</label>
                 <input asp-for="KennelName" class="form-control" />
                 <span asp-validation-for="KennelName" class="text-danger"></span>
             </div>
@@ -101,11 +112,67 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
     <script>
-        // Debug: Log when form is submitted
-        document.querySelector('form').addEventListener('submit', function(e) {
+       
+        document.querySelector('form').addEventListener('submit', function(e) 
+        {
             console.log('Form submitting...');
             console.log('Username:', document.querySelector('[name="Username"]').value);
             console.log('Email:', document.querySelector('[name="Email"]').value);
         });
+
+    </script>
+    <script>
+       
+        const togglePassword = document.getElementById('togglePassword');
+        const password = document.getElementById('password');
+        const passwordIcon = document.getElementById('passwordIcon');
+
+        if (togglePassword && password) 
+        {
+            togglePassword.addEventListener('click', function() 
+            {
+                
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+
+               
+                if (type === 'password') 
+                {
+                    passwordIcon.classList.remove('bi-eye-slash');
+                    passwordIcon.classList.add('bi-eye');
+                } 
+                else 
+                {
+                    passwordIcon.classList.remove('bi-eye');
+                    passwordIcon.classList.add('bi-eye-slash');
+                }
+            });
+        }
+
+        
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const confirmPasswordIcon = document.getElementById('confirmPasswordIcon');
+
+        if (toggleConfirmPassword && confirmPassword) 
+        {
+            toggleConfirmPassword.addEventListener('click', function() 
+            {
+                
+                const type = confirmPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+                confirmPassword.setAttribute('type', type);
+
+                if (type === 'password') 
+                {
+                    confirmPasswordIcon.classList.remove('bi-eye-slash');
+                    confirmPasswordIcon.classList.add('bi-eye');
+                } 
+                else 
+                {
+                    confirmPasswordIcon.classList.remove('bi-eye');
+                    confirmPasswordIcon.classList.add('bi-eye-slash');
+                }
+            });
+        }
     </script>
 }

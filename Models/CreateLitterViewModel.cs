@@ -10,7 +10,7 @@ namespace PupV1.Models
         public int BreedId { get; set; }
 
         [Required]
-        [Range(1, 20, ErrorMessage = "Number of puppies must be between 1 and 20")]
+        [Range(1, 20, ErrorMessage = "Number of puppies in a litter must be between 1 and 20")]
         [Display(Name = "Number of Puppies")]
         public int NumPuppies { get; set; }
 

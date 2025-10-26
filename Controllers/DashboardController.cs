@@ -13,22 +13,59 @@ namespace PupV1.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public DashboardController(ApplicationDbContext context,UserManager<ApplicationUser> userManager)
+        public DashboardController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _userManager = userManager;
+            _webHostEnvironment = webHostEnvironment;
         }
         public async Task<IActionResult> Index()
         {
+            Console.WriteLine("==================== Dashboard Index Called ====================");
+
             var user = await _userManager.GetUserAsync(User);
+            Console.WriteLine($"User: {user?.UserName}");
+
             var trainer = await _context.Trainers
                 .Include(t => t.Trainerskills)
                 .ThenInclude(ts => ts.Skill)
-                .Include(t => t.Trainingrequests)
-                .ThenInclude(r => r.Client)
-               .FirstOrDefaultAsync(t => t.Username == user.UserName);
-           if (trainer == null) return NotFound();
+                .FirstOrDefaultAsync(t => t.Username == user.UserName);
+
+            if (trainer == null)
+            {
+                Console.WriteLine("ERROR: Trainer not found!");
+                return NotFound();
+            }
+
+            Console.WriteLine($"Trainer found: {trainer.Fname} {trainer.Lname} (ID: {trainer.TrainerId})");
+
+            
+            var trainingRequests = await _context.Trainingrequests
+                .Include(r => r.Client)
+                .Where(r => r.TrainerId == trainer.TrainerId && r.RequestStatus == "Pending")
+                .OrderByDescending(r => r.RequestDate)
+                .ToListAsync();
+
+            Console.WriteLine($"Found {trainingRequests.Count} pending training requests");
+            foreach (var req in trainingRequests)
+            {
+                Console.WriteLine($"  - {req.DogName} ({req.RequestStatus})");
+            }
+
+            
+            var trainingProgresses = await _context.TrainingProgresses
+                .Where(p => p.TrainerId == trainer.TrainerId)
+                .OrderByDescending(p => p.IsFinished ? 0 : 1) 
+                .ThenByDescending(p => p.ProgressId)
+                .ToListAsync();
+
+            Console.WriteLine($"Found {trainingProgresses.Count} training progress records");
+            foreach (var prog in trainingProgresses)
+            {
+                Console.WriteLine($"  - {prog.DogName} (Finished: {prog.IsFinished})");
+            }
 
             var viewModel = new DashboardViewModel
             {
@@ -37,8 +74,8 @@ namespace PupV1.Controllers
                 Suburb = trainer.Suburb,
                 City = trainer.City,
                 CellNUm = trainer.CellNum,
-                //TrainerID = trainer.TrainerId,
                 Username = trainer.Username,
+                ImageUrl = trainer.ImageUrl,
                 ImageFile = trainer.ImageFile,
 
                 SelectedSkills = trainer.Trainerskills.Select(ts => new TrainerSkillDisplayViewModel
@@ -47,45 +84,17 @@ namespace PupV1.Controllers
                     SkillLevel = ts.SkillLevel
                 }).ToList(),
 
-                TrainingRequests = await _context.Trainingrequests
-                .Include(r => r.Client)
-                .Where(r => r.TrainerId == trainer.TrainerId)
-                .ToListAsync()
-
+                TrainingRequests = trainingRequests,
+                TrainingProgresses = trainingProgresses
             };
-            viewModel.TrainingProgresses = await _context.TrainingProgresses
-     .Where(p => p.TrainerId == trainer.TrainerId)
-     .ToListAsync();
-            /*if (user == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            var model = new DashboardViewModel
-            {
-                Name = user.Name,
-                Surname = user.Surname,
-                Suburb = user.Suburb,
-                City = user.City,
-                CellNUm = user.CellNUm,
-                TrainerID = user.TrainerID,
-               // Email = user.Email,
-                //UserName = user.UserName,
-                //Password = user.Password,
-            };*/
-            Console.WriteLine($"*** Dashboard Index: Found {viewModel.TrainingProgresses.Count} training progresses ***");
-            TempData["IndexDebug"] = $"Found {viewModel.TrainingProgresses.Count} training records in database";
-            return View(viewModel);
-        }
-       /* public async Task<IActionResult> Dashboard()
-        {
-            var user = await _userManager.GetUserAsync (User);
-            var skills = _context.Trainerskills
-                .Include(us => us.Skill)
-                .Where(us => us.TrainerId == user.TrainerID)
-                .ToList();
 
-            return View(skills);
-        }*/
+            Console.WriteLine("==================== Dashboard Index Complete ====================");
+            TempData["IndexDebug"] = $"Requests: {trainingRequests.Count}, Progress: {trainingProgresses.Count}";
+
+            return View(viewModel);
+            
+        }
+
         public async Task<IActionResult> EditSkills()
         {
             var user = await _userManager.GetUserAsync(User);
@@ -122,7 +131,35 @@ namespace PupV1.Controllers
             trainer.Suburb = model.Suburb;
             trainer.City = model.City;
             trainer.CellNum = model.CellNUm;
-            trainer.ImageFile = model.ImageFile;
+            //trainer.ImageFile = model.ImageFile;
+
+            if (model.ImageFile != null && model.ImageFile.Length > 0)
+            {
+                
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "profiles");
+
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ImageFile.FileName);
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ImageFile.CopyToAsync(fileStream);
+                }
+
+               
+                if (!string.IsNullOrEmpty(trainer.ImageUrl) && trainer.ImageUrl != "/images/default-profile.jpg")
+                {
+                    string oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, trainer.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(oldImagePath))
+                        System.IO.File.Delete(oldImagePath);
+                }
+
+                
+                trainer.ImageUrl = "/images/profiles/" + uniqueFileName;
+            }
 
             await _context.SaveChangesAsync();
             TempData["Message"] = "Profile updated!";
@@ -158,47 +195,122 @@ namespace PupV1.Controllers
             TempData["Message"] = "Skills updated successfully!";
             return RedirectToAction("Index");
         }
-       /* [HttpGet]
-        public async Task<IActionResult> TrainingRequests()
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AcceptRequest(int id)
         {
-            var user = await _userManager.GetUserAsync(User);
+            Console.WriteLine($"==================== AcceptRequest Called ====================");
+            Console.WriteLine($"Request ID: {id}");
 
-            var trainer = await _context.Trainers
-                .FirstOrDefaultAsync(t => t.Username == user.UserName);
-            if (trainer == null) return NotFound();
-
-            var requests = await _context.Trainingrequests
+            var request = await _context.Trainingrequests
                 .Include(r => r.Client)
-                .Where(r => r.TrainerId == trainer.TrainerId)
-                .ToListAsync();
-            return View(requests);
-        }*/
+                .FirstOrDefaultAsync(r => r.TrequestId == id);
+
+            if (request == null)
+            {
+                Console.WriteLine("ERROR: Request not found!");
+                TempData["ErrorMessage"] = "Training request not found.";
+                return RedirectToAction("Index");
+            }
+
+            Console.WriteLine($"Request Found: {request.DogName}");
+
+            try
+            {
+                
+                var progress = new TrainingProgress
+                {
+                    ClientId = request.ClientId,
+                    TrequestId = request.TrequestId,
+                    DogName = request.DogName,
+                    DogBreed = request.DogBreed,
+                    OwnerName = $"{request.Client?.Fname} {request.Client?.Lname}",
+                    TrainerId = request.TrainerId,
+                    Program = request.TrainingProgram,
+                    ProgressNotes = "Training started - Initial session scheduled.",
+                    IsFinished = false
+                };
+
+                Console.WriteLine("Adding TrainingProgress to context...");
+                _context.TrainingProgresses.Add(progress);
+
+                Console.WriteLine("Saving TrainingProgress FIRST...");
+                var result1 = await _context.SaveChangesAsync();
+                Console.WriteLine($"TrainingProgress saved: {result1} rows affected");
+
+                
+                Console.WriteLine("Now removing Trainingrequest...");
+                _context.Trainingrequests.Remove(request);
+
+                Console.WriteLine("Saving removal...");
+                var result2 = await _context.SaveChangesAsync();
+                Console.WriteLine($"Request removal saved: {result2} rows affected");
+
+                if (result1 > 0 && result2 > 0)
+                {
+                    Console.WriteLine("SUCCESS: Both operations completed!");
+                    TempData["SuccessMessage"] = $"Request accepted and training started for {request.DogName}!";
+                }
+                else
+                {
+                    Console.WriteLine($"WARNING: result1={result1}, result2={result2}");
+                    TempData["ErrorMessage"] = "Something went wrong with the save operation.";
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR OCCURRED: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"Inner Exception: {ex.InnerException.Message}");
+                }
+
+                TempData["ErrorMessage"] = $"Error accepting request: {ex.Message}";
+                return RedirectToAction("Index");
+            }
+        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult>AcceptRequest(string id)
+        public async Task<IActionResult> RejectRequest(int id)
         {
+            Console.WriteLine($"==================== RejectRequest Called ====================");
+            Console.WriteLine($"Request ID: {id}");
+
             var request = await _context.Trainingrequests.FindAsync(id);
-            if (request == null) return NotFound();
 
-            request.IsAccepted = true;
-            request.RequestStatus = "Accepted";
+            if (request == null)
+            {
+                Console.WriteLine("ERROR: Request not found!");
+                TempData["ErrorMessage"] = "Training request not found.";
+                return RedirectToAction("Index");
+            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            Console.WriteLine($"Rejecting request for: {request.DogName}");
+
+            try
+            {
+               
+                _context.Trainingrequests.Remove(request);
+
+                var result = await _context.SaveChangesAsync();
+                Console.WriteLine($"SaveChanges result: {result} rows affected");
+
+                TempData["SuccessMessage"] = "Training request declined.";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR: {ex.Message}");
+                TempData["ErrorMessage"] = $"Error rejecting request: {ex.Message}";
+                return RedirectToAction("Index");
+            }
         }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RejectRequest(string id)
-        {
-            var request = await _context.Trainingrequests.FindAsync(id);
-            if (request == null) return NotFound();
-
-            request.IsAccepted = false;
-            request.RequestStatus = "Rejected";
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProgress(TrainingProgress progress)
@@ -206,7 +318,7 @@ namespace PupV1.Controllers
             TempData["Debug"] = "Step 1: Method called";
             Console.WriteLine("*** Step 1: AddProgress method started ***");
 
-            // Check if we received data
+            
             Console.WriteLine($"Received: DogName='{progress.DogName}', DogBreed='{progress.DogBreed}', OwnerName='{progress.OwnerName}', Program='{progress.Program}'");
 
             var user = await _userManager.GetUserAsync(User);
@@ -229,7 +341,7 @@ namespace PupV1.Controllers
             TempData["Debug"] = $"Step 3: Trainer found - ID: {trainer.TrainerId}";
             Console.WriteLine($"*** Step 3: Trainer found: {trainer.TrainerId} ***");
 
-            // Check ModelState
+            
             if (!ModelState.IsValid)
             {
                 var errors = string.Join(", ", ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
@@ -242,7 +354,7 @@ namespace PupV1.Controllers
 
             try
             {
-                // Set trainer ID
+                
                 progress.TrainerId = trainer.TrainerId;
 
                 TempData["Debug"] = "Step 5: About to add to context";
@@ -270,106 +382,61 @@ namespace PupV1.Controllers
 
             return RedirectToAction("Index");
         }
-        /*public async Task<IActionResult> AddProgress(TrainingProgress progress)
-        {
-            var user = await _userManager.GetUserAsync(User);
-            var trainer = await _context.Trainers.FirstOrDefaultAsync(t => t.Username == user.UserName);
-            if (trainer == null) return NotFound();
 
-            Console.WriteLine($"Received: DogName={progress.DogName}, DogBreed={progress.DogBreed}, OwnerName={progress.OwnerName}, Program={progress.Program}");
-
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .Select(x => new {Field = x.Key,
-                    Errors = x.Value.Errors.Select(e => e.ErrorMessage)}).ToList();
-                foreach (var error in errors)
-                {
-                    Console.WriteLine($"Validation Error - Field: {error.Field}, Errors: {string.Join(", ", error.Errors)}");
-                }
-
-                TempData["Error"] = "Please fill in all required fields correctly.";
-                return RedirectToAction("Index");
-                
-                
-            }
-            try
-            {
-                progress.TrainerId = trainer.TrainerId;
-                _context.TrainingProgresses.Add(progress);
-                await _context.SaveChangesAsync();
-
-                TempData["Message"] = "Training progress added successfully!";
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Database Error: {ex.Message}");
-                TempData["Error"] = $"Error saving to database: {ex.Message}";
-            }
-            return RedirectToAction("Index");
-        }*/
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> UpdateProgress(TrainingProgress progress)
+        public async Task<IActionResult> UpdateProgress(int ProgressId, string ProgressNotes, bool IsFinished)
         {
-            Console.WriteLine($"*** UpdateProgress called with ProgressId: {progress.ProgressId} ***");
-            Console.WriteLine($"*** New ProgressNotes: '{progress.ProgressNotes}' ***");
-
-            if (!ModelState.IsValid)
-            {
-                var errors = string.Join(", ", ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage)));
-                TempData["Error"] = $"Update failed - {errors}";
-                Console.WriteLine($"*** UpdateProgress ModelState invalid: {errors} ***");
-                return RedirectToAction("Index");
-            }
+            Console.WriteLine($"*** UpdateProgress called with ProgressId: {ProgressId} ***");
+            Console.WriteLine($"*** New ProgressNotes: '{ProgressNotes}' ***");
+            Console.WriteLine($"*** IsFinished: {IsFinished} ***");
 
             try
             {
-                var existing = await _context.TrainingProgresses.FindAsync(progress.ProgressId);
-                if (existing != null)
+                var existing = await _context.TrainingProgresses.FindAsync(ProgressId);
+
+                if (existing == null)
                 {
-                    Console.WriteLine($"*** Found existing record: {existing.DogName} ***");
-                    Console.WriteLine($"*** Old notes: '{existing.ProgressNotes}' ***");
+                    Console.WriteLine($"*** No record found with ProgressId: {ProgressId} ***");
+                    TempData["ErrorMessage"] = "Training record not found!";
+                    return RedirectToAction("Index");
+                }
 
-                    existing.ProgressNotes = progress.ProgressNotes;
-                    existing.IsFinished = progress.IsFinished;
+                Console.WriteLine($"*** Found existing record: {existing.DogName} ***");
+                Console.WriteLine($"*** Old notes: '{existing.ProgressNotes}' ***");
 
-                    Console.WriteLine($"*** Updated notes: '{existing.ProgressNotes}' ***");
+                
+                existing.ProgressNotes = ProgressNotes;
+                
 
-                    var result = await _context.SaveChangesAsync();
-                    Console.WriteLine($"*** SaveChanges result: {result} ***");
+                Console.WriteLine($"*** Updated notes: '{existing.ProgressNotes}' ***");
 
-                    TempData["Message"] = "Progress notes updated successfully!";
+                
+                _context.Entry(existing).State = EntityState.Modified;
+
+                var result = await _context.SaveChangesAsync();
+                Console.WriteLine($"*** SaveChanges result: {result} rows affected ***");
+
+                if (result > 0)
+                {
+                    TempData["SuccessMessage"] = "Progress notes updated successfully!";
                 }
                 else
                 {
-                    Console.WriteLine($"*** No record found with ProgressId: {progress.ProgressId} ***");
-                    TempData["Error"] = "Training record not found!";
+                    Console.WriteLine("*** WARNING: No rows affected! ***");
+                    TempData["ErrorMessage"] = "No changes were saved.";
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"*** UpdateProgress Error: {ex.Message} ***");
-                TempData["Error"] = $"Update failed: {ex.Message}";
+                Console.WriteLine($"*** Stack Trace: {ex.StackTrace} ***");
+                TempData["ErrorMessage"] = $"Update failed: {ex.Message}";
             }
 
             return RedirectToAction("Index");
-            /*if (ModelState.IsValid)
-            {
-                var existing = await _context.TrainingProgresses.FindAsync(progress.ProgressId);
-                if (existing != null)
-                {
-                    existing.ProgressNotes = progress.ProgressNotes;
-                    existing.IsFinished = progress.IsFinished;
-
-                    await _context.SaveChangesAsync();
-                }
-                    /*_context.Update(progress);
-                await _context.SaveChangesAsync();*/
-            /*}
-            //return RedirectToAction("Index");*/
         }
+        
         [HttpPost]
         public async Task<IActionResult> FinishTraining(int id)
         {
@@ -382,7 +449,9 @@ namespace PupV1.Controllers
             }
             return RedirectToAction("Index");
         }
-        
     }
-
 }
+        
+    
+
+

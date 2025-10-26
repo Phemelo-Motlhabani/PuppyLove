@@ -1,0 +1,59 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<PupV1.Models.Puppyrequest>
+@{
+    ViewData["Title"] = "Incoming Puppy Requests";
+}
+<div class="container mt-4">
+    <h2><i class="bi bi-envelope-open"></i> Incoming Puppy Requests</h2>
+    <p class="lead text-muted">Manage requests from potential clients</p>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    
+    <ul class="nav nav-tabs mb-4" id="requestTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending">
+                Pending <span class="badge bg-warning">@Model.Count(r => r.Status == "Pending")</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="accepted-tab" data-bs-toggle="tab" data-bs-target="#accepted">
+                Accepted <span class="badge bg-success">@Model.Count(r => r.Status == "Accepted")</span>
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="rejected-tab" data-bs-toggle="tab" data-bs-target="#rejected">
+                Rejected <span class="badge bg-danger">@Model.Count(r => r.Status == "Rejected")</span>
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="requestTabsContent">
+        
+        <div class="tab-pane fade show active" id="pending" role="tabpanel">
+            @await Html.PartialAsync("_RequestsList", Model.Where(r => r.Status == "Pending").ToList())
+        </div>
+
+        
+        <div class="tab-pane fade" id="accepted" role="tabpanel">
+            @await Html.PartialAsync("_RequestsList", Model.Where(r => r.Status == "Accepted " ).ToList())
+            </div>
+
+        <div class="tab-pane fade" id="rejected" role="tabpanel">
+            @await Html.PartialAsync("_RequestsList", Model.Where(r => r.Status == "Rejected").ToList())
+        </div>
+    </div>
+    </div>
+<<div class="text-center mt-4">
+    <button type="button" class="btn btn-outline-primary px-4" onclick="history.back()">
+        <i class="bi bi-arrow-left"></i> Back
+    </button>
+</div>

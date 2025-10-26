@@ -1,0 +1,70 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.PuppyRequestViewModel
+@{
+    ViewData["Title"] = "Request Puppy";
+}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2><i class="bi bi-envelope-heart"></i> Request @Model.PuppyName</h2>
+
+            <div class="card mb-4">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="@Model.ImageUrl" class="img-fluid rounded-start" alt="@Model.PuppyName"
+                             style="height: 100%; object-fit: cover;" />
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@Model.PuppyName</h5>
+                            <p class="card-text">
+                                <strong>Breed:</strong> @Model.BreedName<br />
+                                <strong>Price:</strong> <span class="text-success fs-5">R @Model.Price?.ToString("N2")</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">Send Request to Breeder</h4>
+                </div>
+                <div class="card-body">
+                    <form asp-action="RequestPuppy" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" asp-for="PuppyId" />
+
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> The breeder will review your request and respond. Please provide information about yourself and why you'd like this puppy.
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Message" class="form-label fw-bold"></label>
+                            <textarea asp-for="Message" class="form-control" rows="6"
+                                      placeholder="Tell the breeder about yourself, your experience with dogs, your living situation, and why you're interested in this puppy..."></textarea>
+                            <span asp-validation-for="Message" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-send"></i> Send Request
+                            </button>
+                            <a asp-action="BrowsePuppies" class="btn btn-secondary btn-lg">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

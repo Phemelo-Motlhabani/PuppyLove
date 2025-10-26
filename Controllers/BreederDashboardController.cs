@@ -40,6 +40,7 @@ namespace PupV1.Controllers
                 Username = breeder.Username,
                 Name = breeder.Fname,
                 Surname = breeder.Lname,
+                Suburb = breeder.Suburb,
                 City = breeder.City,
                 CellNUm = breeder.CellNum,
                 KennelName = breeder.KennelName,
@@ -74,12 +75,12 @@ namespace PupV1.Controllers
 
             if (model.ImageFile != null && model.ImageFile.Length > 0)
             {
-                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, breeder.ImageUrl.TrimStart('/'));
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images", "profiles");
                 if(!Directory.Exists(uploadsFolder))
                 {
                     Directory.CreateDirectory(uploadsFolder);
                 }
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + model.ImageFile.FileName;
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(model.ImageFile.FileName);
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
                 using (var fileStream = new FileStream(filePath, FileMode.Create))

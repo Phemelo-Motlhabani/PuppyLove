@@ -1,55 +1,128 @@
-﻿@{
+﻿@model PupV1.Models.HomePageViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
+@*<div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 <div class="text-center">
     <a asp-controller="Account" asp-action="ChooseRole">Register</a>
-</div>
-@model IEnumerable<PupV1.Models.Parkrecommendation>
-
-@*@<div id="ParkCarousel" class="carousel slide" data-bs-ride="carousel">
-    <div class="carousel-inner">
-        @if (Model != null && Model.Any())
-        {
-            int i = 0;
-            foreach (var park in Model)
-            {
-                <div class="carousel-item @(i == 0 ?" active" : "")">
-                    <img src="@park.ImageUrl" class="d-block w-50" alt="@park.ParkName" />
-                    <div class="carousel-caption d-none d-md-block">
-                        <h5>@park.ParkName</h5>
-                        <p>@park.Suburb</p>
-                    </div>
-                    </div>
-                    i++;
-            }
-
-        }
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#parkCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#parkCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
-    </button>
 </div>*@
-<div class="swiper mySwiper">
-    <div class="swiper-wrapper">
-        @foreach (var park in Model)
-        {
-            <div class="swiper-slide text-center" style="height: 250px;">
-                <img src="@park.ImageUrl" class="img-fluid" style="height:200px; object-fit:cover;" />
-                <div class="mt-2">
-                    <h6>@park.ParkName</h6>
-                    <p>@park.Suburb, @park.City</p>
-                    </div>
-                    </div>
-        }
+<section class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Welcome to PuppyLove</h1>
+        <p class="lead">Connect with top-rated dog trainers and breeders</p>
+        <div class="mt-4">
+            <a asp-controller="PuppyRequest" asp-action="BrowsePuppies" class="btn btn-light btn-lg me-2">
+                <i class="bi bi-heart-fill"></i> Browse Puppies
+            </a>
+            <a asp-controller="Review" asp-action="BrowseTrainers" class="btn btn-outline-light btn-lg">
+                <i class="bi bi-award"></i> Find a Trainer
+            </a>
+        </div>
     </div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
-</div>
+</section>
+
+
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="bi bi-heart-fill text-danger display-1"></i>
+                        <h4 class="mt-3">Find Your Perfect Puppy</h4>
+                        <p>Browse available puppies from verified breeders</p>
+                        <a asp-controller="PuppyRequest" asp-action="BrowsePuppies" class="btn btn-primary">
+                            Browse Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="bi bi-award text-warning display-1"></i>
+                        <h4 class="mt-3">Expert Dog Trainers</h4>
+                        <p>Connect with experienced trainers for your dog</p>
+                        <a asp-controller="Review" asp-action="BrowseTrainers" class="btn btn-primary">
+                            Find Trainers
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body">
+                        <i class="bi bi-star-fill text-success display-1"></i>
+                        <h4 class="mt-3">Trusted Reviews</h4>
+                        <p>Read reviews from real clients</p>
+                        <a asp-controller="Review" asp-action="BrowseBreeders" class="btn btn-primary">
+                            View Breeders
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+@await Html.PartialAsync("_TopRatedSliders", Model.topRated)
+
+
+<section class="py-5 bg-light text-center">
+    <div class="container">
+        <h2 class="mb-4">Top Dog Parks Near You</h2>
+        <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+                @if (Model.ParkRecommendations != null && Model.ParkRecommendations.Any())
+                {
+                    foreach (var park in Model.ParkRecommendations)
+                    {
+                        <div class="swiper-slide text-center" style="height: 250px;">
+                           @* <img src="@park.ImageUrl" class="img-fluid" style="height:200px; object-fit:cover;" />*@
+                           <img src="@Url.Content("~/" + park.ImageUrl.TrimStart('/'))" alt="@park.ParkName" class="img-fluid" style="height:200px; object-fit:cover;" />
+                            <div class="mt-2">
+                                <h6>@park.ParkName</h6>
+                                <p>@park.Suburb, @park.City</p>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No parks available right now.</p>
+                }
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+</section>
+
+
+<section class="bg-light py-5 text-center">
+    <div class="container">
+        <h2 class="mb-4">Ready to Get Started?</h2>
+        <p class="lead mb-4">Join our community of dog lovers today!</p>
+        <div>
+            @if (!User.Identity.IsAuthenticated)
+            {
+                <a asp-controller="Account" asp-action="ChooseRole" class="btn btn-primary btn-lg me-2">
+                    <i class="bi bi-person-plus"></i> Sign Up
+                </a>
+                <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-box-arrow-in-right"></i> Login
+                </a>
+            }
+            else
+            {
+                <a asp-controller="PuppyRequest" asp-action="BrowsePuppies" class="btn btn-primary btn-lg">
+                    <i class="bi bi-search"></i> Start Browsing
+                </a>
+            }
+        </div>
+    </div>
+</section>

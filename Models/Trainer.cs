@@ -58,9 +58,7 @@ public partial class Trainer
     [InverseProperty("Trainer")]
     public virtual ICollection<Trainingrequest> Trainingrequests { get; set; } = new List<Trainingrequest>();
 
-    /*[InverseProperty("Trequest")]
-    public virtual Trainingrequest? Trainingrequest { get; set; }*/
-    //[InverseProperty("Trainer")]
+    
     public ICollection<TrainingProgress> TrainingProgresses { get; set; } = new List<TrainingProgress>();
 
     [ForeignKey("TrainerId")]

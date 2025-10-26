@@ -15,11 +15,14 @@ public partial class Review
     [Key]
     [Column("ReviewID")]
     public int ReviewId { get; set; }
-
-    public double? Rating { get; set; }
+    [Required]
+    [Range(1,5, ErrorMessage ="Ratin gmust be between 1 and 5")]
+    public double Rating { get; set; }
 
     [StringLength(255)]
     public string? ReviewText { get; set; }
+
+    public DateTime ReviewDate { get; set; }
 
     [Column("ClientID")]
     public int? ClientId { get; set; }
@@ -28,7 +31,7 @@ public partial class Review
     public int? BreederId { get; set; }
 
     [Column("TrainerID")]
-    public int TrainerId { get; set; }
+    public int? TrainerId { get; set; }
 
     [ForeignKey("BreederId")]
     [InverseProperty("Reviews")]

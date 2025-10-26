@@ -35,6 +35,11 @@ public partial class Client
     [StringLength(25)]
     public string? Suburb { get; set; }
 
+    public string? ImageUrl { get; set; }
+
+    [NotMapped]
+    public IFormFile? ImageFile { get; set; }
+
     public int? PostCode { get; set; }
 
     [StringLength(25)]
@@ -51,4 +56,6 @@ public partial class Client
 
     [InverseProperty("Client")]
     public virtual ICollection<Trainingrequest> Trainingrequests { get; set; } = new List<Trainingrequest>();
+
+    public ICollection<TrainingProgress> TrainingProgresses { get; set; } = new List<TrainingProgress>();
 }

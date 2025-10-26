@@ -115,7 +115,7 @@ namespace PupV1.Controllers
             var soldPuppies = litter.Puppies.Count(p => p.Status == "Sold");
 
             int ageInWeeks = litter.BirthDate.HasValue
-                ? (int)((DateTime.Now - litter.BirthDate.Value).TotalDays/7)
+                ? (int)Math.Round((DateTime.Now - litter.BirthDate.Value).TotalDays/7)
                 : 0;
 
             var viewModel = new LitterDetailsViewModel
@@ -143,7 +143,7 @@ namespace PupV1.Controllers
                     ImageUrl = p.ImageUrl ?? "/images/default-puppy.jpg",
                     DateOfBirth = p.DateOfBirth,
                     AgeInWeeks = p.DateOfBirth.HasValue
-                        ? (int)((DateTime.Now - p.DateOfBirth.Value).TotalDays / 7)
+                        ? (int)Math.Round((DateTime.Now - p.DateOfBirth.Value).TotalDays / 7)
                         : 0,
                     HealthStatus = p.HealthStatus
                 }).OrderBy(p => p.PuppyName).ToList()

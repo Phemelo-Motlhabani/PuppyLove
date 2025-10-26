@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Policy;
 
 namespace PupV1.Models
 {
@@ -19,6 +20,8 @@ namespace PupV1.Models
         [StringLength(100)]
         public string? OwnerName { get; set; }
         public int TrainerId { get; set; }
+        public int ClientId { get; set; }
+        public int TrequestId { get; set; }
 
         
         public string? Program { get; set; }
@@ -28,5 +31,7 @@ namespace PupV1.Models
         [ForeignKey("TrainerId")]
         //[InverseProperty("TrainingProgesses")]
         public virtual Trainer? Trainer { get; set; }
+
+        
     }
 }

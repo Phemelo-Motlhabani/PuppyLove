@@ -1,0 +1,247 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PupV1.Models.Puppy
+@{
+    ViewData["Title"] = Model.PuppyName;
+    var ageInWeeks = Model.DateOfBirth.HasValue
+        ? (int)((DateTime.Now - Model.DateOfBirth.Value).TotalDays / 7)
+        : 0;
+}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="BreederDashboard" asp-action="Index">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Litter" asp-action="Index">My Litters</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Litter" asp-action="Details" asp-route-id="@Model.LitterId">@Model.Litter?.BreedType?.BreedName Litter</a></li>
+            <li class="breadcrumb-item active">@Model.PuppyName</li>
+        </ol>
+    </nav>
+    @if (TempData["SuccessMessage"] != null)
+    {
+    <div class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <img src="@Model.ImageUrl" alt="@Model.PuppyName" class="card-img-top" style="height: 400px; object-fit: cover;" />
+                <div class="card-body">
+                    <h2 class="card-title">@Model.PuppyName</h2>
+
+                    @if (Model.Status == "Available")
+                    {
+                        <span class="badge bg-success fs-5">
+                            <i class="bi bi-check-circle"></i> Available
+                        </span>
+                    }
+                    else if (Model.Status == "Sold")
+                    {
+                        <span class="badge bg-secondary fs-5">
+                            <i class="bi bi-bag-check"></i> Sold
+                        </span>
+                    }
+                    else if (Model.Status == "Reserved")
+                    {
+                        <span class="badge bg-warning fs-5">
+                            <i class="bi bi-clock"></i> Reserved
+                        </span>
+                    }
+
+                    <h3 class="text-success mt-3">R @Model.Price?.ToString("N2")</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card shadow mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0"><i class="bi bi-info-circle"></i> Puppy Information</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th style="width: 40%;">Breed:</th>
+                            <td><strong>@Model.Litter?.BreedType?.BreedName</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Gender:</th>
+                            <td>
+                                @if (Model.Gender == "M")
+                                {
+                                    <span><i class="bi bi-gender-male text-primary"></i> Male</span>
+                                }
+                                else
+                                {
+                                    <span><i class="bi bi-gender-female text-danger"></i> Female</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth:</th>
+                            <td>@Model.DateOfBirth?.ToString("MMMM dd, yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th>Age:</th>
+                            <td><strong>@ageInWeeks weeks old</strong></td>
+                        </tr>
+                        <tr>
+                            <th>Weight:</th>
+                            <td>@Model.Weight kg</td>
+                        </tr>
+                        <tr>
+                            <th>Color/Markings:</th>
+                            <td>@Model.Colour</td>
+                        </tr>
+                        <tr>
+                            <th>Size:</th>
+                            <td>
+                                @switch (Model.Size)
+                                {
+                                    case "S":
+                                        <span>Small</span>
+                                        ; break;
+                                    case "M":
+                                        <span>Medium</span>
+                                        ; break;
+                                    case "L":
+                                        <span>Large</span>
+                                        ; break;
+                                    default:
+                                        <span>@Model.Size</span>
+                                        ; break;
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card shadow mb-3">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="bi bi-heart-pulse"></i> Health Information</h4>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th style="width: 40%;">Health Status:</th>
+                            <td>@(Model.HealthStatus ?? "Not specified")</td>
+                        </tr>
+                        <tr>
+                            <th>Vaccinated:</th>
+                            <td>
+                                @if (Model.Vaccinated == "Y")
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Yes
+                                    </span>
+                                    @if (Model.VaccinationDate.HasValue)
+                                    {
+                                        <small class="text-muted">(@Model.VaccinationDate.Value.ToString("MM/dd/yyyy"))</small>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-x-circle"></i> No
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Microchipped:</th>
+                            <td>
+                                @if (!string.IsNullOrEmpty(Model.MicrochipNumber))
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> Yes
+                                    </span>
+                                    <br />
+                                    <small>Chip #: @Model.MicrochipNumber</small>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">
+                                        <i class="bi bi-x-circle"></i> No
+                                    </span>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="card shadow mb-3">
+                    <div class="card-header bg-info text-white">
+                        <h4 class="mb-0"><i class="bi bi-file-text"></i> Description</h4>
+                    </div>
+                    <div class="card-body">
+                        <p>@Model.Description</p>
+                    </div>
+                </div>
+            }
+
+            @if (Model.Status != "Sold")
+            {
+                <div class="card shadow">
+                    <div class="card-header bg-warning">
+                        <h4 class="mb-0"><i class="bi bi-gear"></i> Actions</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <form asp-action="MarkAsSold" asp-route-id="@Model.PuppyId"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to mark @Model.PuppyName as sold?');">
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="bi bi-bag-check"></i> Mark as Sold
+                                </button>
+                            </form>
+
+                            <form asp-action="Delete" asp-route-id="@Model.PuppyId"
+                                  method="post"
+                                  onsubmit="return confirm('Are you sure you want to remove @Model.PuppyName? This action cannot be undone.');">
+                                <button type="submit" class="btn btn-danger w-100">
+                                    <i class="bi bi-trash"></i> Remove Puppy
+                                </button>
+                            </form>
+
+                            <a asp-controller="Litter" asp-action="Details" asp-route-id="@Model.LitterId" class="btn btn-secondary w-100">
+                                <i class="bi bi-arrow-left"></i> Back to Litter
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card shadow">
+                    <div class="card-body text-center">
+                        <p class="mb-3">
+                            <i class="bi bi-info-circle"></i> This puppy has been sold and cannot be modified.
+                        </p>
+                        @if (Model.SoldDate.HasValue)
+                        {
+                            <p class="text-muted">Sold on: @Model.SoldDate.Value.ToString("MMMM dd, yyyy")</p>
+                        }
+                        <a asp-controller="Litter" asp-action="Details" asp-route-id="@Model.LitterId" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Litter
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

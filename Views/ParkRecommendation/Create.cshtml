@@ -5,7 +5,10 @@
 }
 @model PupV1.Models.Parkrecommendation
 
-<h2>Recommend a Park</h2>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+        <h2>Recommend a Park</h2>
 <form asp-action="Create" enctype="multipart/form-data" id="parkForm" method="post">
     <div class="form-group mb-3">
         <label asp-for="ParkName"></label>
@@ -35,3 +38,6 @@
     </div>
     <div asp-validation-summary="All" class="text-danger"></div>
     </form>
+</div>
+</div>
+</div>

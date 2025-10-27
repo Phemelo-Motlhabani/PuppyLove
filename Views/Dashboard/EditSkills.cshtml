@@ -3,7 +3,8 @@
 *@
 @{
 }
-@model TrainerSkillsFormViewModel
+
+@*model TrainerSkillsFormViewModel
 
 @{
     ViewData["Title"] = "edit Skills";
@@ -29,4 +30,52 @@
     }
     <button type="submit" class="btn btn-primary mt-3">Save</button> 
     <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary mt-3">Cancel</a>
-</form>
+</form>*@
+@{
+}
+@model TrainerSkillsFormViewModel
+@{
+    ViewData["Title"] = "Edit Skills";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <h2 class="text-center mb-4">Select Your Skills</h2>
+
+            <form asp-action="EditSkills" method="post">
+                @for (int i = 0; i < Model.Skills.Count; i++)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" asp-for="Skills[@i].IsSelected" />
+                                <label class="form-check-label fw-bold">
+                                    @Model.Skills[i].SkillName
+                                </label>
+                            </div>
+
+                            <div class="ms-4">
+                                <label class="form-label small text-muted">Skill Level</label>
+                                <select asp-for="Skills[@i].SkillLevel" class="form-select form-select-sm">
+                                    <option value="">Select level...</option>
+                                    <option>Beginner</option>
+                                    <option>Intermediate</option>
+                                    <option>Expert</option>
+                                </select>
+                            </div>
+
+                            <input type="hidden" asp-for="Skills[@i].SkillId" />
+                            <input type="hidden" asp-for="Skills[@i].SkillName" />
+                        </div>
+                    </div>
+                }
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-primary px-4">Save</button>
+                    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-secondary px-4 ms-2">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

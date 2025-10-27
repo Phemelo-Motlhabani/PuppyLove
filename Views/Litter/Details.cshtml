@@ -37,9 +37,9 @@
             <div class="row">
                 @if (Model.BirthDate.HasValue)
                 {
-                <div class="col-md-6">
-                    <p><strong>Birth Date:</strong> @Model.BirthDate.Value.ToString("MMMM dd, yyyy")</p>
-                    <p><strong>Age:</strong> @((DateTime.Now - Model.BirthDate) / 7) weeks old</p>
+                    <div class="col-md-6">
+                        <p><strong>Birth Date:</strong> @Model.BirthDate.Value.ToString("MMMM dd, yyyy")</p>
+                        <p><strong>Age:</strong> @*((int)((DateTime.Now - Model.BirthDate) / 7 ))*@@((int)((DateTime.Now - Model.BirthDate.Value).TotalDays / 7)) weeks old</p>
                 </div>}
                 else{
                 <div class="col-md-6">

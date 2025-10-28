@@ -99,6 +99,7 @@ namespace PupV1.Controllers
                 var trainer = new Trainer
                 {
                     Username = model.username,
+                    Password = model.Password,
                     Email = model.Email ?? "",
                     Fname = model.Fname ?? "",
                     Lname = model.Lname ?? "",
@@ -282,6 +283,7 @@ namespace PupV1.Controllers
                 var identityUser = new ApplicationUser
                 {
                     UserName = model.Username,
+                    PasswordHash = model.Password,
                     Email = model.Email ?? "",
                     Name = model.Fname ?? "",
                     Surname = model.Lname ?? "",
